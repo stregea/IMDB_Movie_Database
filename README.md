@@ -25,6 +25,6 @@ To run the program, execute the following command-line command:
 <ul>
     <li><a href="https://github.com/michaeljohnbarton" target="_blank">Michael Barton</a> </li>
     <li><a href="https://github.com/brianacowles" target="_blank">Briana Cowles</a> </li>
-    <li><a href="#" target="_blank">Nikita Massaria</a> </li>
+    <li><a href="https://github.com/nmm9478" target="_blank">Nikita Massaria</a> </li>
     <li><a href="https://github.com/stregea" target="_blank">Samuel Tregea</a> </li>
 </ul>
