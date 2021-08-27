@@ -1,5 +1,5 @@
 from argparse import ArgumentParser, Namespace
-from scripts.extract_datasets import extract_dataset_files
+from scripts.extract_datasets.extract_datasets import extract_dataset_files
 
 
 def setup_args() -> Namespace:
