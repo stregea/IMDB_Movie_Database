@@ -8,7 +8,11 @@ logging.basicConfig(filename=LOG_FILE,
 
 
 def log(message: str, level: str = "info") -> None:
-
+    """
+    Write a message to the log.
+    :param message: The message to write.
+    :param level: The level to write at.
+    """
     level = level.lower()
     chosen_level = logging.NOTSET
 
