@@ -144,3 +144,7 @@ cython_debug/
 
 # Don't include the IDE files.
 .idea
+
+# Don't include the gzip files or their extracted .tsv files.
+DataSets/*.gz
+DataSets/*.tsv
