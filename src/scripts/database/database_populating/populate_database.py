@@ -42,8 +42,11 @@ def _insert_title_basics_data(db: DB) -> None:
     print(f"Beginning insertion for {first_file_to_insert}")
     with open(first_file_to_insert, encoding='utf-8') as file:
         tsv_file = csv.reader(file, delimiter='\t')
-        next(tsv_file) # skip the header
+        next(tsv_file)  # skip the header
+
         for line in tsv_file:
+            # print(line)
+
             query = '''INSERT INTO TitleBasics
                         VALUES (?,?,?,?,?,?,?,?,?);
             '''
@@ -73,7 +76,6 @@ def _insert_title_basics_data(db: DB) -> None:
                           )
             except IntegrityError as e:
                 log(str(e), level="warning")
-            print(line)
 
     execution_time = time.time()
     print(f"Insertion completed in {execution_time-start_time} seconds.")
@@ -87,6 +89,7 @@ def run():
     _insert_title_basics_data(db)
 
     db.close()
+
 
 if __name__ == '__main__':
     run()
