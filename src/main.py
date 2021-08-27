@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from scripts.datasets.extract_datasets.extract_datasets import extract_dataset_files
 from scripts.database.database_startup.database_startup import initialise_database
+from scripts.database.database_populating.populate_database import run
 
 
 def setup_args() -> Namespace:
@@ -19,6 +20,7 @@ def main() -> None:
     """
     extract_dataset_files()
     initialise_database()
+    run()
 
 
 if __name__ == '__main__':
