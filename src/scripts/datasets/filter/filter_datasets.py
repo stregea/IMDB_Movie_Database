@@ -104,7 +104,7 @@ def filter_title_basics(raw_data_path: str, dict_of_title_ids: dict) -> None:
                     if tconst in dict_of_title_ids and 'movie' in title_type.lower():
                         list_of_genres = str(line[8]).split(',')
 
-                        # write an entry for each entry
+                        # reducing the multi-valued properties
                         for genre in list_of_genres:
                             writer.writerow(
                                 [tconst, title_type, line[2], line[3], line[4], line[5], line[6], line[7], genre])
@@ -175,11 +175,13 @@ def filter_name_basics(raw_data_path: str, dict_of_title_ids: dict) -> None:
                 for line in raw_tsv_file:
                     titles_known_for = str(line[5]).split(',')
 
+                    # reducing the multi-valued properties
                     for tconst in titles_known_for:
 
                         if tconst in dict_of_title_ids:
                             professions = str(line[4]).split(',')
 
+                            # reducing the multi-valued properties
                             for profession in professions:
                                 writer.writerow([tconst, line[0], line[1], line[2], line[3], profession])
 
