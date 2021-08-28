@@ -4,7 +4,6 @@ import time
 from sqlite3 import IntegrityError
 from interface.dbconn import DB
 from utils.globals import DATASETS, DATABASE
-from utils.walkers.directory_walker import get_list_of_files
 from utils.logger.logger import log
 
 
@@ -30,10 +29,9 @@ def _get_int_value(values: list, index: int) -> int:
 
 def _insert_title_basics_data(db: DB) -> None:
     """
-    TODO: This is still in development.
+    TODO: This is still in development. Come back to this once data filtering is complete.
     Insert the title.basics.tsv data into the database.
     :param db: The connection to the database.
-    :return:
     """
     first_file_to_insert = os.path.abspath(f"{DATASETS}/title.basics.tsv")
 
@@ -74,6 +72,8 @@ def _insert_title_basics_data(db: DB) -> None:
                                     runtime_minutes,
                                     genres)
                           )
+                log(f"inserted id {tconst}", level="debug")
+
             except IntegrityError as e:
                 log(str(e), level="warning")
 
@@ -83,8 +83,6 @@ def _insert_title_basics_data(db: DB) -> None:
 
 def run():
     db = DB(DATABASE)
-    # tsv_files = get_list_of_files(directory=DATASETS, file_type=".tsv")
-    # print(os.path.abspath(f"{DATASETS}/title.basics.tsv"))
 
     _insert_title_basics_data(db)
 
