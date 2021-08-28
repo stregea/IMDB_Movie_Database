@@ -141,6 +141,7 @@ cython_debug/
 
 # Don't include database files.
 *.db
+*.db-journal
 
 # Don't include the IDE files.
 .idea
@@ -148,3 +149,4 @@ cython_debug/
 # Don't include the gzip files or their extracted .tsv files.
 DataSets/*.gz
 DataSets/*.tsv
+DataSets/Filtered/*.tsv
