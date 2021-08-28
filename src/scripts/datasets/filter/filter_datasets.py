@@ -213,3 +213,5 @@ def filter_files() -> None:
             filter_title_basics(file, dict_of_ids)
         elif 'title.ratings.tsv' in file:
             filter_title_ratings(file, dict_of_ids)
+
+    print("Filtering processes complete.")
