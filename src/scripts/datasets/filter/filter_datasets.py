@@ -111,6 +111,11 @@ def filter_title_basics(raw_data_path: str, dict_of_title_ids: dict) -> None:
 
 
 def filter_title_ratings(raw_data_path: str, dict_of_title_ids: dict) -> None:
+    """
+    Filter the title.ratings.tsv file.
+    :param raw_data_path: The file path to the raw data.
+    :param dict_of_title_ids: Dictionary containing all of the title's that have the US as their region.
+    """
     # This will become the newly filtered file.
     filtered_file_directory = get_filtered_file(raw_data_path)
 
@@ -139,6 +144,46 @@ def filter_title_ratings(raw_data_path: str, dict_of_title_ids: dict) -> None:
                         writer.writerow(line)
 
 
+def filter_name_basics(raw_data_path: str, dict_of_title_ids: dict) -> None:
+    """
+    Filter the name.basics.tsv file.
+    :param raw_data_path: The file path to the raw data.
+    :param dict_of_title_ids: Dictionary containing all of the title's that have the US as their region.
+    """
+    # This will become the newly filtered file.
+    filtered_file_directory = get_filtered_file(raw_data_path)
+
+    create_filtered_directory()
+
+    # only perform the filter if the file does not exist.
+    if not os.path.isfile(filtered_file_directory):
+
+        # Read the original input.
+        with open(raw_data_path, mode='r', encoding='utf-8') as raw_data:
+            raw_tsv_file = csv.reader(raw_data, delimiter='\t')
+
+            # Write filtered data.
+            with open(filtered_file_directory, mode='w', encoding='utf-8', newline='') as filtered_file:
+                writer = csv.writer(filtered_file, delimiter='\t')
+
+                # re-write the header by having tconst be the first column and remove 'knownForTitles'.
+                writer.writerow(['tconst', 'nconst', 'primaryName', 'deathYear', 'primaryProfession'])
+
+                # skip the header file
+                next(raw_tsv_file)
+
+                for line in raw_tsv_file:
+                    titles_known_for = str(line[5]).split(',')
+
+                    for tconst in titles_known_for:
+
+                        if tconst in dict_of_title_ids:
+                            professions = str(line[4]).split(',')
+
+                            for profession in professions:
+                                writer.writerow([tconst, line[0], line[1], line[2], line[3], profession])
+
+
 def filter_files() -> None:
     """
     Filter name.basics.tsv, title.akas.tsv, title.basics.tsv, and title.ratings.tsv.
@@ -148,19 +193,21 @@ def filter_files() -> None:
     import time
     tsv_files = get_list_of_files(DATASETS, file_type=".tsv")
 
-    dict_of_ids = {}
-
     print("Beginning filtering process...")
-    start = time.time()
+
+    # pop title.akas.tsv from the array.
+    title_akas_file = tsv_files.pop(1)
+
+    print(f"\tfiltering '{title_akas_file}'...")
+
+    # create a dictionary of title_id's from the title.akas.tsv file.
+    dict_of_ids = filter_title_akas(title_akas_file)
+
     for file in tsv_files:
         print(f"\tfiltering '{file}'...")
-        if 'title.akas.tsv' in file:
-            dict_of_ids = filter_title_akas(file)
-
-        # dict_of_ids will be populated by the time it reaches here to to how the list is sorted.
+        if 'name.basics.tsv' in file:
+            filter_name_basics(file, dict_of_ids)
         elif 'title.basics.tsv' in file:
             filter_title_basics(file, dict_of_ids)
         elif 'title.ratings.tsv' in file:
             filter_title_ratings(file, dict_of_ids)
-
-    print(f"Filtering completed in {time.time() - start} seconds")

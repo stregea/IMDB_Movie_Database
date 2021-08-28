@@ -2,7 +2,7 @@ from argparse import ArgumentParser, Namespace
 from scripts.datasets.extract_datasets.extract_datasets import extract_dataset_files
 from scripts.database.database_startup.database_startup import initialise_database
 # from scripts.database.database_populating.populate_database import run
-from scripts.filter.filter_data import filter_files
+from scripts.datasets.filter.filter_datasets import filter_files
 
 
 def setup_args() -> Namespace:
