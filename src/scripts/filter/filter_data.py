@@ -40,28 +40,31 @@ def filter_title_akas(raw_data_path: str) -> dict:
 
     create_filtered_directory()
 
-    # Read the original input.
-    with open(raw_data_path, mode='r', encoding='utf-8') as raw_data:
-        raw_tsv_file = csv.reader(raw_data, delimiter='\t')
+    # only perform the filter if the file does not exist.
+    if not os.path.isfile(filtered_file_directory):
 
-        # Write filtered data.
-        with open(filtered_file_directory, mode='w', encoding='utf-8', newline='') as filtered_file:
-            writer = csv.writer(filtered_file, delimiter='\t')
+        # Read the original input.
+        with open(raw_data_path, mode='r', encoding='utf-8') as raw_data:
+            raw_tsv_file = csv.reader(raw_data, delimiter='\t')
 
-            for index, line in enumerate(raw_tsv_file):
+            # Write filtered data.
+            with open(filtered_file_directory, mode='w', encoding='utf-8', newline='') as filtered_file:
+                writer = csv.writer(filtered_file, delimiter='\t')
 
-                # Write the header
-                if index == 0:
-                    writer.writerow(line)
-                    continue
+                for index, line in enumerate(raw_tsv_file):
 
-                title_id = line[0]
-                region = line[3]
+                    # Write the header
+                    if index == 0:
+                        writer.writerow(line)
+                        continue
 
-                # only include movies that are regionally in the US and if their title id isn't in the dictionary.
-                if region == 'US' and title_id not in title_id_dictionary:
-                    writer.writerow(line)
-                    title_id_dictionary[line[0]] = None
+                    title_id = line[0]
+                    region = line[3]
+
+                    # only include movies that are regionally in the US and if their title id isn't in the dictionary.
+                    if region == 'US' and title_id not in title_id_dictionary:
+                        writer.writerow(line)
+                        title_id_dictionary[line[0]] = None
 
     return title_id_dictionary
 
@@ -70,36 +73,70 @@ def filter_title_basics(raw_data_path: str, dict_of_title_ids: dict) -> None:
     """
     Filter the title.basics.tsv file.
     :param raw_data_path: The file path to the raw data.
+    :param dict_of_title_ids: Dictionary containing all of the title's that have the US as their region.
     """
     # This will become the newly filtered file.
     filtered_file_directory = get_filtered_file(raw_data_path)
 
     create_filtered_directory()
 
-    # Read the original input.
-    with open(raw_data_path, mode='r', encoding='utf-8') as raw_data:
-        raw_tsv_file = csv.reader(raw_data, delimiter='\t')
+    # only perform the filter if the file does not exist.
+    if not os.path.isfile(filtered_file_directory):
 
-        # Write filtered data.
-        with open(filtered_file_directory, mode='w', encoding='utf-8', newline='') as filtered_file:
-            writer = csv.writer(filtered_file, delimiter='\t')
+        # Read the original input.
+        with open(raw_data_path, mode='r', encoding='utf-8') as raw_data:
+            raw_tsv_file = csv.reader(raw_data, delimiter='\t')
 
-            for index, line in enumerate(raw_tsv_file):
+            # Write filtered data.
+            with open(filtered_file_directory, mode='w', encoding='utf-8', newline='') as filtered_file:
+                writer = csv.writer(filtered_file, delimiter='\t')
 
-                # Write the header
-                if index == 0:
-                    writer.writerow(line)
-                    continue
+                for index, line in enumerate(raw_tsv_file):
 
-                tconst = str(line[0])
-                title_type = str(line[1])
+                    # Write the header
+                    if index == 0:
+                        writer.writerow(line)
+                        continue
 
-                if tconst in dict_of_title_ids and 'movie' in title_type.lower():
-                    list_of_genres = str(line[8]).split(',')
+                    tconst = line[0]
+                    title_type = str(line[1])
 
-                    # write an entry for each entry
-                    for genre in list_of_genres:
-                        writer.writerow([tconst, title_type, line[2], line[3], line[4], line[5], line[6], line[7], genre])
+                    if tconst in dict_of_title_ids and 'movie' in title_type.lower():
+                        list_of_genres = str(line[8]).split(',')
+
+                        # write an entry for each entry
+                        for genre in list_of_genres:
+                            writer.writerow(
+                                [tconst, title_type, line[2], line[3], line[4], line[5], line[6], line[7], genre])
+
+
+def filter_title_ratings(raw_data_path: str, dict_of_title_ids: dict) -> None:
+    # This will become the newly filtered file.
+    filtered_file_directory = get_filtered_file(raw_data_path)
+
+    create_filtered_directory()
+
+    # only perform the filter if the file does not exist.
+    if not os.path.isfile(filtered_file_directory):
+
+        # Read the original input.
+        with open(raw_data_path, mode='r', encoding='utf-8') as raw_data:
+            raw_tsv_file = csv.reader(raw_data, delimiter='\t')
+
+            # Write filtered data.
+            with open(filtered_file_directory, mode='w', encoding='utf-8', newline='') as filtered_file:
+                writer = csv.writer(filtered_file, delimiter='\t')
+
+                for index, line in enumerate(raw_tsv_file):
+
+                    if index == 0:
+                        writer.writerow(line)
+                        continue
+
+                    tconst = line[0]
+
+                    if tconst in dict_of_title_ids:
+                        writer.writerow(line)
 
 
 def filter_files() -> None:
@@ -119,8 +156,11 @@ def filter_files() -> None:
         print(f"\tfiltering '{file}'...")
         if 'title.akas.tsv' in file:
             dict_of_ids = filter_title_akas(file)
-        elif 'title.basics.tsv' in file:
-            # dict_of_ids will be populated by the time it reaches here to to how the list is sorted.
-            filter_title_basics(file, dict_of_ids)
 
-    print(f"Filtering completed in {time.time()-start} seconds")
+        # dict_of_ids will be populated by the time it reaches here to to how the list is sorted.
+        elif 'title.basics.tsv' in file:
+            filter_title_basics(file, dict_of_ids)
+        elif 'title.ratings.tsv' in file:
+            filter_title_ratings(file, dict_of_ids)
+
+    print(f"Filtering completed in {time.time() - start} seconds")
