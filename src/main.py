@@ -19,9 +19,12 @@ def main() -> None:
     """
     Run the application.
     """
+    import time
+    start = time.time()
     extract_dataset_files()
     initialise_database()
     filter_files()
+    print(f"Processes took {(time.time()-start) / 60} minutes.")
     # run()
 
 
