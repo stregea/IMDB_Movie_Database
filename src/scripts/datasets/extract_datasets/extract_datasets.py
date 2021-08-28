@@ -3,22 +3,7 @@ import os
 import shutil
 from utils.globals import DATASETS
 from utils.logger.logger import log
-
-
-def get_list_of_files(directory: str, file_type: str) -> list:
-    """
-    Search a specified directory and add the file's specified by a file type to a list.
-    :param directory: The directory to search.
-    :param file_type: The type of file to add to the list.
-    :return: A list of files within the specified directory.
-    """
-    ret = []
-
-    for (root, subdirectories, files) in os.walk(directory):
-        for file in files:
-            if file.endswith(file_type):
-                ret.append(os.path.abspath(os.path.join(root, file)))
-    return ret
+from utils.walkers.directory_walker import get_list_of_files
 
 
 def extract_dataset_files() -> None:
@@ -26,8 +11,9 @@ def extract_dataset_files() -> None:
     Extract the .tsv files from their zipped versions.
     """
     datasets = get_list_of_files(directory=DATASETS, file_type=".gz")
+    files_have_been_extracted = False
 
-    print('Beginning extracting process...')
+    print('Beginning extraction process...')
     for dataset in datasets:
         dataset_extract_name = dataset.split(".gz")[0]
 
@@ -37,15 +23,19 @@ def extract_dataset_files() -> None:
             # Unzip the gzip file
             with gzip.open(dataset, 'rb') as f_in:
                 with open(dataset_extract_name, 'wb') as f_out:
-                    print(f'Extracting \'{dataset_extract_name}\'...')
+                    print(f'\tExtracting \'{dataset_extract_name}\'...')
                     log(f'Beginning extract for \'{dataset_extract_name}\' from \'{dataset}\'.')
 
                     # perform the extract
                     shutil.copyfileobj(f_in, f_out)
 
                     log(f'\'{dataset_extract_name}\' has successfully been extracted from \'{dataset}\'.')
+                    files_have_been_extracted = True
 
-    print('Process complete.')
+    if files_have_been_extracted:
+        print('Extraction process complete.')
+    else:
+        print('Nothing to extract.')
 
 
 if __name__ == '__main__':

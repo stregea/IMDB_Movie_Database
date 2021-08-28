@@ -8,7 +8,8 @@ CREATE_TITLE_BASICS_TABLE = '''CREATE TABLE IF NOT EXISTS TitleBasics(
                                 startYear integer,
                                 endYear integer,
                                 runtimeMinutes integer,
-                                genres varchar
+                                genres varchar,
+                                UNIQUE(tconst)
                             );'''
 
 # Command used to create the TitleAkas table.
@@ -26,7 +27,7 @@ CREATE_TITLE_AKAS_TABLE = '''CREATE TABLE IF NOT EXISTS TitleAkas(
                             );'''
 
 # Command used to create the TitleRatings table.
-CREATE_TITLE_RATINGS_TABLE = '''CREATE TABLE IF NOT EXISTS TitleAkas(
+CREATE_TITLE_RATINGS_TABLE = '''CREATE TABLE IF NOT EXISTS TitleRatings(
                                 id integer PRIMARY KEY AUTOINCREMENT,
                                 tconst varchar NOT NULL,
                                 averageRating real,
@@ -35,7 +36,7 @@ CREATE_TITLE_RATINGS_TABLE = '''CREATE TABLE IF NOT EXISTS TitleAkas(
                             );'''
 
 # Command used to create the NameBasics table.
-CREATE_NAME_BASICS_TABLE = '''CREATE TABLE IF NOT EXISTS TitleAkas(
+CREATE_NAME_BASICS_TABLE = '''CREATE TABLE IF NOT EXISTS NameBasics(
                                 id integer PRIMARY KEY AUTOINCREMENT,
                                 nconst varchar NOT NULL,
                                 primaryName varchar,
