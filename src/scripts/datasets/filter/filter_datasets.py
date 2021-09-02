@@ -60,7 +60,7 @@ def filter_title_akas(raw_data_path: str, dict_of_movie_ids: dict = None) -> dic
 
                     # Write the header
                     if index == 0:
-                        writer.writerow(line)
+                        writer.writerow(['tconst', line[1], line[2], line[3], line[4], line[5], line[6], line[7]])
                         continue
 
                     title_id = line[0]
@@ -112,21 +112,7 @@ def filter_title_basics(raw_data_path: str, dict_of_title_ids: dict) -> dict:
                     title_type = str(line[1])
 
                     if tconst in dict_of_title_ids and 'movie' in title_type.lower():
-                        # list_of_genres = str(line[8]).split(',')
-
-                        writer.writerow(
-                            [tconst, title_type, line[2], line[3], line[4], line[5], line[6], line[7], line[7]])
-                        ret[tconst] = None
-                    # else:
-                    #     if tconst in dict_of_title_ids:
-                    #         # update the dictionary and remove the non-movie related title.
-                    #         del dict_of_title_ids[tconst]
-                        # reducing the multi-valued properties
-                        # for genre in list_of_genres:
-                        #     writer.writerow(
-                        #         [tconst, title_type, line[2], line[3], line[4], line[5], line[6], line[7], genre])
-
-    return ret
+                        writer.writerow(line)
 
 
 def filter_title_ratings(raw_data_path: str, dict_of_title_ids: dict) -> None:

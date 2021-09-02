@@ -3,6 +3,7 @@ from scripts.datasets.extract_datasets.extract_datasets import extract_dataset_f
 from scripts.database.database_startup.database_startup import initialise_database
 # from scripts.database.database_populating.populate_database import run
 from scripts.datasets.filter.filter_datasets import filter_files
+from scripts.datasets.combine.combine_files import combine_title_files
 
 
 def setup_args() -> Namespace:
@@ -24,6 +25,12 @@ def main() -> None:
     extract_dataset_files()
     initialise_database()
     filter_files()
+
+    if not combine_title_files():
+        sys.exit("Error occurred combining files.")
+    
+    # expand files
+    
     print(f"Processes took {(time.time()-start) / 60} minutes.")
     # run()
 
