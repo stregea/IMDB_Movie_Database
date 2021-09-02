@@ -82,6 +82,6 @@ def combine_title_files() -> bool:
         fully_combined_df = partially_combined_df.merge(basics_df, on='tconst', how='outer')
 
         # Write out files
-        fully_combined_df.to_csv(combined_file, sep='\t')
+        fully_combined_df.to_csv(combined_file, sep='\t', index=False)
 
-        return True
+    return True

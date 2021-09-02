@@ -1,9 +1,11 @@
+import sys
 from argparse import ArgumentParser, Namespace
 from scripts.datasets.extract_datasets.extract_datasets import extract_dataset_files
 from scripts.database.database_startup.database_startup import initialise_database
 # from scripts.database.database_populating.populate_database import run
 from scripts.datasets.filter.filter_datasets import filter_files
 from scripts.datasets.combine.combine_files import combine_title_files
+from scripts.datasets.expand.reduce_multi_value import reduce_multi_values_for_title
 
 
 def setup_args() -> Namespace:
@@ -29,8 +31,8 @@ def main() -> None:
     if not combine_title_files():
         sys.exit("Error occurred combining files.")
     
-    # expand files
-    
+    reduce_multi_values_for_title()
+
     print(f"Processes took {(time.time()-start) / 60} minutes.")
     # run()
 
