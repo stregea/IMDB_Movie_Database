@@ -9,6 +9,7 @@ combined_directory = os.path.abspath(f"{DATASETS}/Combined")
 # error message for not found files
 file_error = "Filtered file \'{}\' not found."
 
+
 def create_combined_directory() -> None:
     """
     Create the directory that will hold the newly combined dataset.
@@ -17,13 +18,14 @@ def create_combined_directory() -> None:
         os.mkdir(combined_directory)
 
 
-def get_combined_file(raw_data_path) -> str:
+def get_combined_file(raw_data_path: str) -> str:
     """
     Return the path to the combined data.
     :param raw_data_path: The path to the initial data file that is to be combined.
     :return: The filepath to the combined data.
     """
     return os.path.abspath(f"{combined_directory}/{os.path.basename(raw_data_path)}")
+
 
 def combine_title_files() -> bool:
     """

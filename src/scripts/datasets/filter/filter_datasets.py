@@ -67,13 +67,13 @@ def filter_title_akas(raw_data_path: str, dict_of_movie_ids: dict = None) -> dic
                     region = line[3]
 
                     # only include movies that are regionally in the US and if their title id isn't in the dictionary.
-
+                    # The first check performs a check for a US-based title.
+                    # The second performs a check to determine if the title is a US-based movie.
+                    #   -- The second check is only entered upon the second filtering of 'title.akas.tsv'
                     if region == 'US' and (title_id not in title_id_dictionary and dict_of_movie_ids is None) or \
                             region == 'US' and (dict_of_movie_ids is not None and title_id in dict_of_movie_ids):
                         writer.writerow(line)
                         title_id_dictionary[line[0]] = None
-
-                    # if region == 'US' and dict_of_movie_ids is None and title_id not in title_id_dictionary:
 
     return title_id_dictionary
 
@@ -112,7 +112,11 @@ def filter_title_basics(raw_data_path: str, dict_of_title_ids: dict) -> dict:
                     title_type = str(line[1])
 
                     if tconst in dict_of_title_ids and 'movie' in title_type.lower():
-                        writer.writerow(line)
+                        writer.writerow(
+                            [tconst, title_type, line[2], line[3], line[4], line[5], line[6], line[7], line[8]])
+                        ret[tconst] = None
+
+    return ret
 
 
 def filter_title_ratings(raw_data_path: str, dict_of_title_ids: dict) -> None:
