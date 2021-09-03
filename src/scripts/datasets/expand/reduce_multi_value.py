@@ -1,6 +1,7 @@
 import os
 import csv
 from utils.globals import DATASETS
+
 # from utils.walkers.directory_walker import get_list_of_files
 
 # directory to contain the combined title data.
@@ -8,6 +9,7 @@ expanded_directory = os.path.abspath(f"{DATASETS}/Expanded")
 
 # error message for not found files
 file_error = "Combined file \'{}\' not found."
+
 
 def create_expanded_directory() -> None:
     """
@@ -17,7 +19,7 @@ def create_expanded_directory() -> None:
         os.mkdir(expanded_directory)
 
 
-def get_expanded_file(raw_data_path) -> str:
+def get_expanded_file(raw_data_path: str) -> str:
     """
     Return the path to the expanded data.
     :param raw_data_path: The path to the initial data file that is to be expanded.
@@ -35,8 +37,8 @@ def reduce_multi_values_for_title() -> None:
 
     create_expanded_directory()
 
-    # only perform the expansion if the file does not exist.
-    if not os.path.isfile(expanded_file):
+    # Perform the expansion only if the file does exists.
+    if os.path.isfile(expanded_file):
 
         # Read the combined input.
         with open(DATASETS + "/Combined/title.combined.tsv", mode='r', encoding='utf-8') as combined_data:
@@ -58,5 +60,5 @@ def reduce_multi_values_for_title() -> None:
                     # reducing the multi-valued properties
                     for genre in list_of_genres:
                         writer.writerow(
-                            [line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], 
-                            line[9], line[10], line[11], line[12], line[13], line[14], line[15], line[16], genre])
+                            [line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8],
+                             line[9], line[10], line[11], line[12], line[13], line[14], line[15], line[16], genre])
