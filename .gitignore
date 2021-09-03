@@ -150,3 +150,8 @@ cython_debug/
 DataSets/*.gz
 DataSets/*.tsv
 DataSets/Filtered/*.tsv
+DataSets/Combined/*.tsv
+DataSets/Expanded/*.tsv
+
+# Don't include this file
+.DS_Store

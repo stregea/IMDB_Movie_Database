@@ -24,10 +24,11 @@ def get_filtered_file(raw_data_path) -> str:
     return os.path.abspath(f"{filtered_directory}/{os.path.basename(raw_data_path)}")
 
 
-def filter_title_akas(raw_data_path: str) -> dict:
+def filter_title_akas(raw_data_path: str, dict_of_movie_ids: dict = None) -> dict:
     """
     Filter the title.akas.tsv file.
     :param raw_data_path: The file path to the raw data.
+    :param dict_of_movie_ids: Dictionary containing titleId's that map to US-related movies..
     :return: A dictionary containing all of the title id's associated with movies with the US as their region.
     """
     # Dictionary to contain the title_id's (tconst's)
@@ -39,6 +40,10 @@ def filter_title_akas(raw_data_path: str) -> dict:
     filtered_file_directory = get_filtered_file(raw_data_path)
 
     create_filtered_directory()
+
+    # delete the previously filtered file to allow for performing a re-filter.
+    if os.path.isfile(filtered_file_directory) and dict_of_movie_ids is not None:
+        os.remove(filtered_file_directory)
 
     # only perform the filter if the file does not exist.
     if not os.path.isfile(filtered_file_directory):
@@ -55,21 +60,25 @@ def filter_title_akas(raw_data_path: str) -> dict:
 
                     # Write the header
                     if index == 0:
-                        writer.writerow(line)
+                        writer.writerow(['tconst', line[1], line[2], line[3], line[4], line[5], line[6], line[7]])
                         continue
 
                     title_id = line[0]
                     region = line[3]
 
                     # only include movies that are regionally in the US and if their title id isn't in the dictionary.
-                    if region == 'US' and title_id not in title_id_dictionary:
+                    # The first check performs a check for a US-based title.
+                    # The second performs a check to determine if the title is a US-based movie.
+                    #   -- The second check is only entered upon the second filtering of 'title.akas.tsv'
+                    if region == 'US' and (title_id not in title_id_dictionary and dict_of_movie_ids is None) or \
+                            region == 'US' and (dict_of_movie_ids is not None and title_id in dict_of_movie_ids):
                         writer.writerow(line)
                         title_id_dictionary[line[0]] = None
 
     return title_id_dictionary
 
 
-def filter_title_basics(raw_data_path: str, dict_of_title_ids: dict) -> None:
+def filter_title_basics(raw_data_path: str, dict_of_title_ids: dict) -> dict:
     """
     Filter the title.basics.tsv file.
     :param raw_data_path: The file path to the raw data.
@@ -79,6 +88,7 @@ def filter_title_basics(raw_data_path: str, dict_of_title_ids: dict) -> None:
     filtered_file_directory = get_filtered_file(raw_data_path)
 
     create_filtered_directory()
+    ret = {}
 
     # only perform the filter if the file does not exist.
     if not os.path.isfile(filtered_file_directory):
@@ -102,12 +112,11 @@ def filter_title_basics(raw_data_path: str, dict_of_title_ids: dict) -> None:
                     title_type = str(line[1])
 
                     if tconst in dict_of_title_ids and 'movie' in title_type.lower():
-                        list_of_genres = str(line[8]).split(',')
+                        writer.writerow(
+                            [tconst, title_type, line[2], line[3], line[4], line[5], line[6], line[7], line[8]])
+                        ret[tconst] = None
 
-                        # reducing the multi-valued properties
-                        for genre in list_of_genres:
-                            writer.writerow(
-                                [tconst, title_type, line[2], line[3], line[4], line[5], line[6], line[7], genre])
+    return ret
 
 
 def filter_title_ratings(raw_data_path: str, dict_of_title_ids: dict) -> None:
@@ -141,7 +150,7 @@ def filter_title_ratings(raw_data_path: str, dict_of_title_ids: dict) -> None:
                     tconst = line[0]
 
                     if tconst in dict_of_title_ids:
-                        writer.writerow(line)
+                        writer.writerow([tconst, line[1], line[2]])
 
 
 def filter_name_basics(raw_data_path: str, dict_of_title_ids: dict) -> None:
@@ -210,8 +219,11 @@ def filter_files() -> None:
         if 'name.basics.tsv' in file:
             filter_name_basics(file, dict_of_ids)
         elif 'title.basics.tsv' in file:
-            filter_title_basics(file, dict_of_ids)
+            dict_of_ids = filter_title_basics(file, dict_of_ids)
         elif 'title.ratings.tsv' in file:
             filter_title_ratings(file, dict_of_ids)
+
+    print(f"\tfiltering '{title_akas_file}' once more...")
+    filter_title_akas(title_akas_file, dict_of_movie_ids=dict_of_ids)
 
     print("Filtering processes complete.")

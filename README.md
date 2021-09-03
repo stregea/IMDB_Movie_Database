@@ -10,6 +10,10 @@ Semester project for CSCI-521 @ Rochester Institute of Technology. Update this i
 Install Python 3.9 or later. The download can be found <a href="https://www.python.org/downloads/" target="_blank">here</a>.
    * To see your latest version of python execute the command-line command: `/path/to/python3/directory/python3 -V`
 
+<br/>
+
+Once Python 3.9+ has been installed execute the command-line command: `pip3 install -r requirements.txt` to install the required
+     packages being used within the program.
 
 ## Project Arguments
 ```
