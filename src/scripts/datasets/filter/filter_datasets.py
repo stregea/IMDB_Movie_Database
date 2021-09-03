@@ -213,6 +213,18 @@ def filter_name_basics(raw_data_path: str, dict_of_movie_ids: dict) -> None:
                                 writer.writerow([tconst, line[0], line[1], line[2], line[3], profession])
 
 
+def get_index(array_of_values: list, wanted_value: str) -> int:
+    """
+    Get an the index associated with a wanted value in the array
+    :param array_of_values: The array to search.
+    :param wanted_value: The value to search for.
+    :return: The index the wanted_value exists within the array.
+    """
+    for index, value in enumerate(array_of_values):
+        if value == wanted_value:
+            return index
+
+
 def filter_files() -> None:
     """
     Filter name.basics.tsv, title.akas.tsv, title.basics.tsv, and title.ratings.tsv.
@@ -222,10 +234,10 @@ def filter_files() -> None:
     print("Beginning filtering process...")
 
     # Get title.akas.tsv from the array.
-    title_akas_file = tsv_files[1]
+    title_akas_file = tsv_files[get_index(tsv_files, os.path.abspath(f'{DATASETS}/title.akas.tsv'))]
 
     # Pop title.basics.tsv from the array.
-    title_basics_file = tsv_files.pop(2)
+    title_basics_file = tsv_files.pop(get_index(tsv_files, os.path.abspath(f'{DATASETS}/title.basics.tsv')))
 
     # Scan the 'title.akas.tsv' file and retrieve US-based cinema ID's.
     dict_of_us_title_ids = get_us_based_title_ids(title_akas_file)
