@@ -37,8 +37,12 @@ def reduce_multi_values_for_title() -> None:
 
     create_expanded_directory()
 
-    # Perform the expansion only if the file does exists.
-    if os.path.isfile(expanded_file):
+    print('Beginning expansion process...')
+
+    # only perform the expansion if the file does not exist.
+    if not os.path.isfile(expanded_file):
+
+        print(f'\tExpanding \'{expanded_file}\'...')
 
         # Read the combined input.
         with open(DATASETS + "/Combined/title.combined.tsv", mode='r', encoding='utf-8') as combined_data:
@@ -62,3 +66,7 @@ def reduce_multi_values_for_title() -> None:
                         writer.writerow(
                             [line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8],
                              line[9], line[10], line[11], line[12], line[13], line[14], line[15], line[16], genre])
+
+            print(f'Expansion process complete.')
+    else:
+        print(f'No file to expand since \'{expanded_file}\' already exists.')

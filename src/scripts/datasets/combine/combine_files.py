@@ -37,8 +37,11 @@ def combine_title_files() -> bool:
 
     create_combined_directory()
 
+    print('Beginning combining process...')
+
     # only perform the combination if the file does not exist.
     if not os.path.isfile(combined_file):
+
         filtered_tsv_files = get_list_of_files(DATASETS + "/Filtered/", file_type=".tsv")
 
         akas_df = None
@@ -85,5 +88,9 @@ def combine_title_files() -> bool:
 
         # Write out files
         fully_combined_df.to_csv(combined_file, sep='\t', index=False)
+
+        print('Combining process complete.')
+    else:
+        print(f'No file to combine since \'{combined_file}\' already exists.')
 
     return True
