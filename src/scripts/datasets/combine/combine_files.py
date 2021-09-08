@@ -131,14 +131,8 @@ def combine_name_file() -> bool:
             print(file_error.format("name.basics.tsv"))
             return False
 
-        print(name_df.info())
-        print(title_combined_df.info())
-
-        name_df['tconst'] = name_df['tconst'].astype('str')
-        title_combined_df['tconst'] = title_combined_df['tconst'].astype('str')
-
         # combine files
-        fully_combined_df = name_df.merge(name_df, on='tconst', how='outer')
+        fully_combined_df = name_df.merge(title_combined_df, on='tconst', how='outer')
 
         # write out files
         fully_combined_df.to_csv(output_file, sep='\t', index=False)

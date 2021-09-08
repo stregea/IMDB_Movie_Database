@@ -194,7 +194,7 @@ def filter_name_basics(raw_data_path: str, dict_of_movie_ids: dict) -> None:
                 writer = csv.writer(filtered_file, delimiter='\t')
 
                 # re-write the header by having tconst be the first column and remove 'knownForTitles'.
-                writer.writerow(['tconst', 'nconst', 'primaryName', 'deathYear', 'primaryProfession'])
+                writer.writerow(['tconst', 'nconst', 'primaryName', 'birthYear', 'deathYear', 'primaryProfession'])
 
                 # skip the header file
                 next(raw_tsv_file)
