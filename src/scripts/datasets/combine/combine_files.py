@@ -94,3 +94,57 @@ def combine_title_files() -> bool:
         print(f'No file to combine since \'{combined_file}\' already exists.')
 
     return True
+
+def combine_name_file() -> bool:
+    """
+    Combine the combined title file with the name file
+    :return: whether or not combination was successful
+    """
+
+    # the previously combined file
+    combined_file = get_combined_file(DATASETS + "/Combined/title.combined.tsv")
+
+    # the final output file
+    output_file = get_combined_file(DATASETS + "/Combined/final.output.tsv")
+
+    # make sure the combined file exists
+    if os.path.isfile(combined_file):
+
+        name_df = None
+        title_combined_df = None
+
+        name_df_initialized = False
+        title_combined_df_initialized = False
+
+        # read title.combined.tsv into pandas dataframe
+        title_combined_df = pd.read_csv(DATASETS + "/Expanded/title.expanded.tsv", sep="\t", dtype={'isOriginalTitle': str, 'startYear': object})
+        title_combined_df_initialized = True
+
+        if not title_combined_df_initialized:
+            print(file_error.format("title.combined.tsv"))
+
+        # read name.basics.tsv into pandas dataframe
+        name_df = pd.read_csv(DATASETS + "/Filtered/name.basics.tsv", sep="\t")
+        name_df_initialized = True
+
+        if not name_df_initialized:
+            print(file_error.format("name.basics.tsv"))
+            return False
+
+        print(name_df.info())
+        print(title_combined_df.info())
+
+        name_df['tconst'] = name_df['tconst'].astype('str')
+        title_combined_df['tconst'] = title_combined_df['tconst'].astype('str')
+
+        # combine files
+        fully_combined_df = name_df.merge(name_df, on='tconst', how='outer')
+
+        # write out files
+        fully_combined_df.to_csv(output_file, sep='\t', index=False)
+
+        print('Combining process complete.')
+    else:
+        print(f'No file to combine since \'{output_file}\' already exists.')
+
+    return True

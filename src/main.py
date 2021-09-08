@@ -5,6 +5,7 @@ from scripts.database.database_startup.database_startup import initialise_databa
 # from scripts.database.database_populating.populate_database import run
 from scripts.datasets.filter.filter_datasets import filter_files
 from scripts.datasets.combine.combine_files import combine_title_files
+from scripts.datasets.combine.combine_files import combine_name_file
 from scripts.datasets.expand.reduce_multi_value import reduce_multi_values_for_title
 
 
@@ -32,6 +33,8 @@ def main() -> None:
         sys.exit("Error occurred combining files.")
     
     reduce_multi_values_for_title()
+    
+    combine_name_file()
 
     print(f"Processes took {(time.time()-start) / 60} minutes.")
     # run()
