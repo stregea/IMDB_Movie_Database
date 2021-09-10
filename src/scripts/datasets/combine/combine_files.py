@@ -85,7 +85,7 @@ def combine_title_files() -> bool:
         # Combine files
         partially_combined_df = akas_df.merge(ratings_df, on='tconst', how='outer')
         fully_combined_df = partially_combined_df.merge(basics_df, on='tconst', how='outer')
-
+        
         # Write out files
         fully_combined_df.to_csv(combined_file, sep='\t', index=False)
 
@@ -132,7 +132,8 @@ def combine_name_file() -> bool:
             return False
 
         # combine files
-        fully_combined_df = name_df.merge(title_combined_df, on='tconst', how='outer')
+        fully_combined_df = title_combined_df.merge(name_df, how='left', on='tconst')
+        fully_combined_df.fillna('\\N', inplace=True)
 
         # write out files
         fully_combined_df.to_csv(output_file, sep='\t', index=False)
