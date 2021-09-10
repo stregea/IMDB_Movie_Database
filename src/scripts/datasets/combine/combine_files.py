@@ -85,7 +85,7 @@ def combine_title_files() -> bool:
         # Combine files
         partially_combined_df = akas_df.merge(ratings_df, on='tconst', how='outer')
         fully_combined_df = partially_combined_df.merge(basics_df, on='tconst', how='outer')
-        
+ 
         # Write out files
         fully_combined_df.to_csv(combined_file, sep='\t', index=False)
 
@@ -100,6 +100,8 @@ def combine_name_file() -> bool:
     Combine the combined title file with the name file
     :return: whether or not combination was successful
     """
+    
+    print("Creating final output...")
 
     # the previously combined file
     combined_file = get_combined_file(DATASETS + "/Combined/title.combined.tsv")
@@ -108,7 +110,7 @@ def combine_name_file() -> bool:
     output_file = get_combined_file(DATASETS + "/Combined/final.output.tsv")
 
     # make sure the combined file exists
-    if os.path.isfile(combined_file):
+    if not os.path.isfile(output_file):
 
         name_df = None
         title_combined_df = None
@@ -138,8 +140,8 @@ def combine_name_file() -> bool:
         # write out files
         fully_combined_df.to_csv(output_file, sep='\t', index=False)
 
-        print('Combining process complete.')
+        print('Final output generated.')
     else:
-        print(f'No file to combine since \'{output_file}\' already exists.')
+        print(f'\'{output_file}\' already exists.')
 
     return True
