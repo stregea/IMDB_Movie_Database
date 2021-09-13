@@ -21,7 +21,7 @@ TBD
 ```
 
 ## DataSet
-The dataset to be used must be downloaded locally and placed within the `DataSets/'` directory. 
+The dataset to be used must be downloaded locally and placed within the `DataSets/` directory. 
 More information on the dataset to use can be found <a href="https://github.com/stregea/IMDB_Movie_Database/tree/main/DataSets" target="_blank">here</a>.
 
 ## Run The Application
