@@ -1,5 +1,5 @@
 # IMDB_Movie_Database
-Semester project for CSCI-521 @ Rochester Institute of Technology. Update this information later.
+Semester project for CSCI-521 @ Rochester Institute of Technology.
 
 ## Requirements
 <ul>
@@ -21,8 +21,11 @@ TBD
 ```
 
 ## DataSet
-The dataset to be used must be downloaded locally and placed within the `DataSets/` directory. Do not extract the required files.
-More information on the dataset to use can be found <a href="https://github.com/stregea/IMDB_Movie_Database/tree/main/DataSets" target="_blank">here</a>.
+The dataset to be used must be downloaded locally and placed within the `DataSets/` directory.
+<ul>
+    <li>Do not extract the required files.</li>
+    <li>More useful information on the dataset to use can be found <a href="https://github.com/stregea/IMDB_Movie_Database/tree/main/DataSets" target="_blank">here</a>.</li>
+</ul>
 
 ## Run The Application
 To run the program, execute the following command-line command:
