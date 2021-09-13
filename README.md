@@ -20,10 +20,13 @@ Once Python 3.9+ has been installed execute the command-line command: `pip3 inst
 TBD
 ```
 
+## DataSet
+The dataset to be used must be downloaded locally and placed within the `DataSets/'` directory. 
+More information on the dataset to use can be found <a href="https://github.com/stregea/IMDB_Movie_Database/tree/main/DataSets" target="_blank">here</a>.
+
 ## Run The Application
 To run the program, execute the following command-line command:
 `/path/to/python3/directory/python3 /path/to/project/directory/src/main.py`
-
 
 ## Authors
 <ul>
