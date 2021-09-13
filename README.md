@@ -21,13 +21,14 @@ TBD
 ```
 
 ## DataSet
-The dataset to be used must be downloaded locally and placed within the `DataSets/` directory. 
+The dataset to be used must be downloaded locally and placed within the `DataSets/` directory. Do not extract the required files.
 More information on the dataset to use can be found <a href="https://github.com/stregea/IMDB_Movie_Database/tree/main/DataSets" target="_blank">here</a>.
 
 ## Run The Application
 To run the program, execute the following command-line command:
 `/path/to/python3/directory/python3 /path/to/project/directory/src/main.py`
-
+    * Note: The process from extracting the dataset to producing the final output may take several minutes.
+ 
 ## Authors
 <ul>
     <li><a href="https://github.com/michaeljohnbarton" target="_blank">Michael Barton</a> </li>
