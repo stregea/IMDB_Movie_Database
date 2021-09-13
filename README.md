@@ -27,7 +27,7 @@ More information on the dataset to use can be found <a href="https://github.com/
 ## Run The Application
 To run the program, execute the following command-line command:
 `/path/to/python3/directory/python3 /path/to/project/directory/src/main.py`
-    * Note: The process from extracting the dataset to producing the final output may take several minutes.
+   * Note: The process from extracting the dataset to producing the final output may take several minutes.
  
 ## Authors
 <ul>
