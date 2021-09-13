@@ -95,6 +95,7 @@ def combine_title_files() -> bool:
 
     return True
 
+
 def combine_name_file() -> bool:
     """
     Combine the combined title file with the name file
@@ -111,12 +112,6 @@ def combine_name_file() -> bool:
 
     # make sure the combined file exists
     if not os.path.isfile(output_file):
-
-        name_df = None
-        title_combined_df = None
-
-        name_df_initialized = False
-        title_combined_df_initialized = False
 
         # read title.combined.tsv into pandas dataframe
         title_combined_df = pd.read_csv(DATASETS + "/Expanded/title.expanded.tsv", sep="\t", dtype={'isOriginalTitle': str, 'startYear': object})
