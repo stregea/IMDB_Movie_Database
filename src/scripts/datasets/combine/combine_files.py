@@ -85,12 +85,58 @@ def combine_title_files() -> bool:
         # Combine files
         partially_combined_df = akas_df.merge(ratings_df, on='tconst', how='outer')
         fully_combined_df = partially_combined_df.merge(basics_df, on='tconst', how='outer')
-
+ 
         # Write out files
         fully_combined_df.to_csv(combined_file, sep='\t', index=False)
 
         print('Combining process complete.')
     else:
         print(f'No file to combine since \'{combined_file}\' already exists.')
+
+    return True
+
+
+def combine_name_file() -> bool:
+    """
+    Combine the combined title file with the name file
+    :return: whether or not combination was successful
+    """
+    
+    print("Creating final output...")
+
+    # the previously combined file
+    combined_file = get_combined_file(DATASETS + "/Combined/title.combined.tsv")
+
+    # the final output file
+    output_file = get_combined_file(DATASETS + "/Combined/final.output.tsv")
+
+    # make sure the combined file exists
+    if not os.path.isfile(output_file):
+
+        # read title.combined.tsv into pandas dataframe
+        title_combined_df = pd.read_csv(DATASETS + "/Expanded/title.expanded.tsv", sep="\t", dtype={'isOriginalTitle': str, 'startYear': object})
+        title_combined_df_initialized = True
+
+        if not title_combined_df_initialized:
+            print(file_error.format("title.combined.tsv"))
+
+        # read name.basics.tsv into pandas dataframe
+        name_df = pd.read_csv(DATASETS + "/Filtered/name.basics.tsv", sep="\t")
+        name_df_initialized = True
+
+        if not name_df_initialized:
+            print(file_error.format("name.basics.tsv"))
+            return False
+
+        # combine files
+        fully_combined_df = title_combined_df.merge(name_df, how='left', on='tconst')
+        fully_combined_df.fillna('\\N', inplace=True)
+
+        # write out files
+        fully_combined_df.to_csv(output_file, sep='\t', index=False)
+
+        print('Final output generated.')
+    else:
+        print(f'\'{output_file}\' already exists.')
 
     return True
