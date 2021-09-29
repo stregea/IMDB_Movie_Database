@@ -46,9 +46,37 @@ CREATE_NAME_BASICS_TABLE = '''CREATE TABLE IF NOT EXISTS NameBasics(
                                 knownForTitles varchar
                             );'''
 
+CREATE_IMDB_TABLE = '''CREATE TABLE IF NOT EXISTS IMDB(
+                        id integer PRIMARY KEY AUTOINCREMENT,
+                        tconst varchar,
+                        ordering integer,
+                        title varchar,
+                        region varchar,
+                        language varchar,
+                        types varchar,
+                        attributes varchar,
+                        isOriginalTitle integer,
+                        averageRating real,
+                        numVotes integer,
+                        titleType varchar,
+                        primaryTitle varchar,
+                        originalTitle varchar,
+                        isAdult integer,
+                        startYear integer,
+                        endYear integer,
+                        runtimeMinutes integer,
+                        genre varchar,
+                        nconst varchar,
+                        primaryName varchar,
+                        birthYear integer,
+                        deathYear integer,
+                        primaryProfession varchar
+                    );'''
+
 CREATE_TABLE_LIST = [
     CREATE_TITLE_BASICS_TABLE,
     CREATE_TITLE_AKAS_TABLE,
     CREATE_TITLE_RATINGS_TABLE,
-    CREATE_NAME_BASICS_TABLE
+    CREATE_NAME_BASICS_TABLE,
+    CREATE_IMDB_TABLE
 ]
