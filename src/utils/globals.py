@@ -8,3 +8,9 @@ LOG_FILE = os.path.abspath('../imdb.log')
 
 # Path to the folder containing the zipped datasets.
 DATASETS = os.path.abspath('../DataSets/')
+
+# Path to the folder containing the zipped datasets.
+COMBINED = os.path.abspath('../DataSets/Combined/')
+
+# Path to the folder containing the data dictionary.
+DATA_DICTIONARY = os.path.abspath('../DataDictionary/')
