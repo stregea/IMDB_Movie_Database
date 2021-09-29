@@ -2,12 +2,12 @@ import sys
 from argparse import ArgumentParser, Namespace
 from scripts.datasets.extract_datasets.extract_datasets import extract_dataset_files
 from scripts.database.database_startup.database_startup import initialise_database
-# from scripts.database.database_populating.populate_database import run
 from scripts.datasets.filter.filter_datasets import filter_files
 from scripts.datasets.combine.combine_files import combine_title_files
 from scripts.datasets.combine.combine_files import combine_name_file
 from scripts.datasets.expand.reduce_multi_value import reduce_multi_values_for_title
 from scripts.data_dictionary.data_dictionary_populate.populate_data_dictionary import create_data_dictionary
+
 
 def setup_args() -> Namespace:
     """
@@ -54,7 +54,6 @@ def main() -> None:
 
     if args.data_dictionary:
         create_data_dictionary()
-    # run()
 
 
 if __name__ == '__main__':
