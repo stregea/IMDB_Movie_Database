@@ -9,12 +9,14 @@ def print_dictionary(d: dict) -> None:
     :param d: The dictionary to print.
     """
     print("{")
-    for key in d:
-        print(f"\t{key}: ")
-        for more_keys in d[key]:
-            print("\t\t{")
-            print(f"\t\t\t{more_keys}: {d[key][more_keys]}")
-            print("\t\t}")
+    for i, key in enumerate(d):
+        outer_brace = '},' if i < len(d) - 1 else '}'
+        print(f"\t{key}")
+        print("\t{")
+        for j, more_keys in enumerate(d[key]):
+            char = ',' if j < len(d[key]) - 1 else ''
+            print(f"\t\t{more_keys}: {d[key][more_keys]}{char}")
+        print(f"\t{outer_brace}")
     print("}")
 
 
@@ -44,6 +46,7 @@ def determine_data_types_and_characteristics() -> list[tuple]:
         ('ordering', 'integer', 'nominal'),
         ('title', 'string', 'nominal'),
         ('region', 'string', 'nominal'),
+        ('language', 'string', 'nominal'),
         ('types', 'string', 'nominal'),
         ('attributes', 'string', 'nominal'),
         ('isOriginalTitle', 'boolean', 'nominal'),
@@ -80,8 +83,8 @@ def determine_range_of_values(data_dictionary: dict) -> None:
 
         # Only determine the range if the characteristic is not 'nominal'
         if data_dictionary[attribute_key]['Characteristics'].lower() != 'nominal':
-            bottom_range = str(float('inf'))
-            upper_range = str(float('-inf'))
+            data_dictionary[attribute_key]['Bottom Range'] = str(float('inf'))
+            data_dictionary[attribute_key]['Upper Range'] = str(float('-inf'))
 
             with open(final_output_file, mode='r', encoding='utf-8') as file:
                 output_file = csv.reader(file, delimiter='\t')
@@ -89,17 +92,27 @@ def determine_range_of_values(data_dictionary: dict) -> None:
                 # Skip the header file
                 next(output_file)
 
+                print(f"\t\tDetermining range for: {attribute_key}")
                 # Iterate through all rows to determine the bottom and upper ranges.
-                for row in output_file:
-                    if row[attribute_column] != '\\N':
-                        if row[attribute_column] < bottom_range:
-                            bottom_range = row[attribute_column]
-                        if row[attribute_column] > upper_range:
-                            upper_range = row[attribute_column]
+                for i, row in enumerate(output_file):
+                    if row[attribute_column] == '\\N':
+                        continue
 
-            # Set the bottom and upper ranges
-            data_dictionary[attribute_key]['Bottom Range'] = bottom_range
-            data_dictionary[attribute_key]['Upper Range'] = upper_range
+                    if float(row[attribute_column]) < float(data_dictionary[attribute_key]['Bottom Range']):
+
+                        # if new year is BC and the current bottom year is BC and the current bottom range is larger
+                        # than the current one
+                        if attribute_key == 'birthYear' and row[attribute_column][:2] == '00' and \
+                                data_dictionary[attribute_key]['Bottom Range'][:2] == '00' and \
+                                float(data_dictionary[attribute_key]['Bottom Range']) > float(row[attribute_column]):
+                            pass
+                        else:
+                            data_dictionary[attribute_key]['Bottom Range'] = row[attribute_column]
+
+                    # Take into account BC years for birthYear
+
+                    if float(row[attribute_column]) > float(data_dictionary[attribute_key]['Upper Range']):
+                        data_dictionary[attribute_key]['Upper Range'] = row[attribute_column]
 
         # Shift the column right by 1
         attribute_column += 1
