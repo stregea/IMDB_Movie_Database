@@ -32,6 +32,39 @@ def create_inner_dictionary() -> dict:
         'Upper Range': None
     }
 
+def determine_number_unique_entries(data_dictionary: dict) -> None:
+    final_output_file = os.path.abspath(os.path.join(COMBINED, "final.output.tsv"))
+    # Start at column0
+    attribute_column = 0
+
+    # Iterate through all of the attributes
+    for attribute_key in data_dictionary:
+        #data_dictionary[attribute_key]['Number of Unique Entries'] = 2
+        unique_entries = {}
+        unique = 0
+        total_entries = 0
+        with open(final_output_file, mode='r', encoding='utf-8') as file:
+            output_file = csv.reader(file, delimiter='\t')
+            # Skip the header file
+            next(output_file)
+
+            for row in output_file:
+                if row[attribute_column] not in unique_entries.keys():
+                    unique_entries[row[attribute_column]] = 1
+                else:
+                    unique_entries[row[attribute_column]] +=1
+                total_entries+=1
+            for k in unique_entries:
+                if unique_entries.get(k) == 1:
+                    unique+=1
+
+            print("Unique number of entries: ", unique)
+            print("Total number of entries: ", total_entries)
+
+
+
+
+
 
 def determine_data_types_and_characteristics() -> list[tuple]:
     """
@@ -44,6 +77,7 @@ def determine_data_types_and_characteristics() -> list[tuple]:
         ('ordering', 'integer', 'nominal'),
         ('title', 'string', 'nominal'),
         ('region', 'string', 'nominal'),
+        ('language', 'string', 'nominal'),
         ('types', 'string', 'nominal'),
         ('attributes', 'string', 'nominal'),
         ('isOriginalTitle', 'boolean', 'nominal'),
@@ -114,15 +148,20 @@ def create_data_dictionary():
     # populate the dictionary with attribute names as the id, and populate the Type and Characteristics fields.
     for tup in data_and_value_types:
         attribute_name = tup[0]
+        print(attribute_name)
         data_dictionary[attribute_name] = create_inner_dictionary()
         data_dictionary[attribute_name]['Type'] = tup[1]
         data_dictionary[attribute_name]['Characteristics'] = tup[2]
 
-    print("\tPopulating the range of values for non-nominal attributes...")
-    determine_range_of_values(data_dictionary)
+    #print("\tPopulating the range of values for non-nominal attributes...")
 
-    print("Data Dictionary")
-    print_dictionary(data_dictionary)
+    ###determine_range_of_values(data_dictionary)
+    print("\tDetermining unique number of entries...")
+    print(determine_number_unique_entries(data_dictionary))
+    #determine_total_num_entries(data_dictionary)
+
+    # print("Data Dictionary")
+    # print_dictionary(data_dictionary)
 
 
 if __name__ == '__main__':
