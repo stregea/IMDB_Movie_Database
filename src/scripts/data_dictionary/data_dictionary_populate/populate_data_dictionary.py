@@ -172,6 +172,7 @@ def create_data_dictionary() -> None:
 
     # populate the dictionary with attribute names as the id, and populate the Type and Characteristics fields.
     print("\tPopulating attributes, their data types and their characteristics...")
+    # populate the dictionary with attribute names as the id, and populate the Type and Characteristics fields.
     for tup in data_and_value_types:
         attribute_name = tup[0]
         data_dictionary[attribute_name] = create_inner_dictionary()
