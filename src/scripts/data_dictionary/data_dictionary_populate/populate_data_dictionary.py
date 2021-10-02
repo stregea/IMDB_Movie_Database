@@ -34,39 +34,6 @@ def create_inner_dictionary() -> dict:
         'Upper Range': None
     }
 
-def determine_number_unique_entries(data_dictionary: dict) -> None:
-    final_output_file = os.path.abspath(os.path.join(COMBINED, "final.output.tsv"))
-    # Start at column0
-    attribute_column = 0
-
-    # Iterate through all of the attributes
-    for attribute_key in data_dictionary:
-        #data_dictionary[attribute_key]['Number of Unique Entries'] = 2
-        unique_entries = {}
-        unique = 0
-        total_entries = 0
-        with open(final_output_file, mode='r', encoding='utf-8') as file:
-            output_file = csv.reader(file, delimiter='\t')
-            # Skip the header file
-            next(output_file)
-
-            for row in output_file:
-                if row[attribute_column] not in unique_entries.keys():
-                    unique_entries[row[attribute_column]] = 1
-                else:
-                    unique_entries[row[attribute_column]] +=1
-                total_entries+=1
-            for k in unique_entries:
-                if unique_entries.get(k) == 1:
-                    unique+=1
-
-            print("Unique number of entries: ", unique)
-            print("Total number of entries: ", total_entries)
-
-
-
-
-
 
 def determine_number_unique_entries(data_dictionary: dict) -> None:
     """
@@ -91,7 +58,7 @@ def determine_number_unique_entries(data_dictionary: dict) -> None:
             for row in output_file:
 
                 # Skip the null attributes.
-                if str(row[attribute_column] == '\\N'):
+                if row[attribute_column] == '\\N':
                     continue
 
                 if row[attribute_column] not in unique_entries.keys():
@@ -205,10 +172,8 @@ def create_data_dictionary() -> None:
 
     # populate the dictionary with attribute names as the id, and populate the Type and Characteristics fields.
     print("\tPopulating attributes, their data types and their characteristics...")
-    # populate the dictionary with attribute names as the id, and populate the Type and Characteristics fields.
     for tup in data_and_value_types:
         attribute_name = tup[0]
-        print(attribute_name)
         data_dictionary[attribute_name] = create_inner_dictionary()
         data_dictionary[attribute_name]['Type'] = tup[1]
         data_dictionary[attribute_name]['Characteristics'] = tup[2]
