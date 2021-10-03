@@ -54,6 +54,8 @@ def determine_number_unique_entries(data_dictionary: dict) -> None:
             # Skip the header file
             next(output_file)
 
+            print(f"\t\tDetermining the unique and total count for: {attribute_key}")
+
             # Count the number of values for an attribute
             for row in output_file:
 
@@ -73,8 +75,8 @@ def determine_number_unique_entries(data_dictionary: dict) -> None:
                 if unique_entries.get(k) == 1:
                     unique += 1
 
-            data_dictionary[attribute_key]['Number of Unique Entries'] = unique
-            data_dictionary[attribute_key]['Total Number of Entries'] = total_entries
+            data_dictionary[attribute_key]['Number of Unique Entries'] = f"{unique:,}"
+            data_dictionary[attribute_key]['Total Number of Entries'] = f"{total_entries:,}"
 
         attribute_column += 1  # shift column for the next attribute
 
@@ -139,6 +141,8 @@ def determine_range_of_values(data_dictionary: dict) -> None:
                 print(f"\t\tDetermining range for: {attribute_key}")
                 # Iterate through all rows to determine the bottom and upper ranges.
                 for i, row in enumerate(output_file):
+
+                    # Skip the null attributes.
                     if row[attribute_column] == '\\N':
                         continue
 
@@ -183,7 +187,7 @@ def create_data_dictionary() -> None:
     determine_range_of_values(data_dictionary)
 
     # Determine the total number and unique entry count of each attribute.
-    print("\tDetermining unique number of entries...")
+    print("\tDetermining unique and total number of entries...")
     determine_number_unique_entries(data_dictionary)
 
     print("Data Dictionary")
