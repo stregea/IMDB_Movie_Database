@@ -22,7 +22,7 @@ optional arguments:
   -f, --filter          filter and generate tsv data to be combined into one
                         output file
   -dd, --data_dictionary
-                        generate a data dictionary for the database.
+                        generate a data dictionary for the database
 ```
 
 ## DataSet
@@ -35,7 +35,7 @@ The dataset to be used must be downloaded locally and placed within the `DataSet
 ## Run The Application
 To run the program, execute the following command-line command:
 `/path/to/python3/directory/python3 /path/to/project/directory/src/main.py`
-   * If you are running the above command and you are not using the complete file path for executing `/path/to/project/directory/src/main.py`, please make sure you are in the `src/` directory before execution.<br />
+   * If you are running the above command, and you are not using the complete file path for executing `/path/to/project/directory/src/main.py`, please make sure you are in the `src/` directory before execution.<br />
    * Note: The process from extracting the dataset to producing the final output may take several minutes.
  
 ## Authors

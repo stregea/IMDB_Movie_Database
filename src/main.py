@@ -24,7 +24,7 @@ def setup_args() -> Namespace:
 
     parser.add_argument('-dd',
                         '--data_dictionary',
-                        help='generate a data dictionary for the database.',
+                        help='generate a data dictionary for the database',
                         action='store_true')
     return parser.parse_args()
 
