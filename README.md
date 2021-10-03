@@ -17,7 +17,12 @@ Once Python 3.9+ has been installed execute the command-line command: `pip3 inst
 
 ## Project Arguments
 ```
-TBD
+optional arguments:
+  -h, --help            show this help message and exit
+  -f, --filter          filter and generate tsv data to be combined into one
+                        output file
+  -dd, --data_dictionary
+                        generate a data dictionary for the database.
 ```
 
 ## DataSet
