@@ -51,6 +51,7 @@ def determine_number_unique_entries(data_dictionary: dict) -> None:
         total_entries = 0
         with open(final_output_file, mode='r', encoding='utf-8') as file:
             output_file = csv.reader(file, delimiter='\t')
+
             # Skip the header file
             next(output_file)
 
@@ -76,7 +77,7 @@ def determine_number_unique_entries(data_dictionary: dict) -> None:
                     unique += 1
 
             data_dictionary[attribute_key]['Number of Unique Entries'] = f"{unique:,}"
-            data_dictionary[attribute_key]['Total Number of Entries'] = f"{total_entries:,}"
+            data_dictionary[attribute_key]['Total Number of Entries'] = f"{total_entries:,d}"
 
         attribute_column += 1  # shift column for the next attribute
 
@@ -156,8 +157,6 @@ def determine_range_of_values(data_dictionary: dict) -> None:
                             pass
                         else:
                             data_dictionary[attribute_key]['Bottom Range'] = row[attribute_column]
-
-                    # Take into account BC years for birthYear
 
                     if float(row[attribute_column]) > float(data_dictionary[attribute_key]['Upper Range']):
                         data_dictionary[attribute_key]['Upper Range'] = row[attribute_column]
