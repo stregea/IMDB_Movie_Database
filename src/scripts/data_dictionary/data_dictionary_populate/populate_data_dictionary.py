@@ -32,13 +32,14 @@ def create_inner_dictionary() -> dict:
         'Characteristics': None,
         'Bottom Range (min)': None,
         'Upper Range (max)': None,
-        'Mean': None
+        'Mean': None,
+        'Mode': None
     }
 
 
-def determine_number_unique_entries(data_dictionary: dict) -> None:
+def determine_number_unique_entries_and_mode(data_dictionary: dict) -> None:
     """
-    Determine the total count and unique count for each attribute in the output file.
+    Determine the total count, unique count and mode for each attribute in the output file.
     :param data_dictionary: The data dictionary to read and write to.
     """
     final_output_file = os.path.abspath(os.path.join(COMBINED, "final.output.tsv"))
@@ -72,13 +73,26 @@ def determine_number_unique_entries(data_dictionary: dict) -> None:
 
                 total_entries += 1
 
-            # Count the total number of unique entries for an attribute
+            champ_mode = 0
+            champ_num_entries = 0
+
             for k in unique_entries:
+
+                # Count the total number of unique entries for an attribute
                 if unique_entries.get(k) == 1:
                     unique += 1
+                # Calculate the mode
+                if unique_entries.get(k) > champ_num_entries:
+                    champ_mode = k
+                    champ_num_entries = unique_entries.get(k)
+            
 
             data_dictionary[attribute_key]['Number of Unique Entries'] = f"{unique:,}"
             data_dictionary[attribute_key]['Total Number of Entries'] = f"{total_entries:,d}"
+
+            # Only insert mode if it's a non-numeric value
+            if data_dictionary[attribute_key]['Characteristics'].lower() != 'nominal':
+                data_dictionary[attribute_key]['Mode'] = champ_mode
 
         attribute_column += 1  # shift column for the next attribute
 
@@ -118,7 +132,7 @@ def determine_data_types_and_characteristics() -> list[tuple]:
 
 def determine_mean_and_range_of_values(data_dictionary: dict) -> None:
     """
-    Determine the range of values for attributes that aren't nominal in nature.
+    Determine the range and mean of values for attributes that aren't nominal in nature.
     :param data_dictionary: The data dictionary to store the values in.
     """
     final_output_file = os.path.abspath(os.path.join(COMBINED, "final.output.tsv"))
@@ -129,7 +143,7 @@ def determine_mean_and_range_of_values(data_dictionary: dict) -> None:
     # Iterate through all of the attributes
     for attribute_key in data_dictionary:
 
-        # Only determine the range if the characteristic is not 'nominal'
+        # Only determine the range and mean if the characteristic is not 'nominal'
         if data_dictionary[attribute_key]['Characteristics'].lower() != 'nominal':
             data_dictionary[attribute_key]['Bottom Range'] = str(float('inf'))
             data_dictionary[attribute_key]['Upper Range'] = str(float('-inf'))
@@ -202,7 +216,7 @@ def create_data_dictionary() -> None:
 
     # Determine the total number and unique entry count of each attribute.
     print("\tDetermining unique and total number of entries...")
-    determine_number_unique_entries(data_dictionary)
+    determine_number_unique_entries_and_mode(data_dictionary)
 
     print("Data Dictionary")
     print_dictionary(data_dictionary)
