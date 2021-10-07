@@ -30,8 +30,9 @@ def create_inner_dictionary() -> dict:
         'Total Number of Entries': None,
         'Type': None,
         'Characteristics': None,
-        'Bottom Range': None,
-        'Upper Range': None
+        'Bottom Range (min)': None,
+        'Upper Range (max)': None,
+        'Mean': None
     }
 
 
@@ -115,7 +116,7 @@ def determine_data_types_and_characteristics() -> list[tuple]:
     ]
 
 
-def determine_range_of_values(data_dictionary: dict) -> None:
+def determine_mean_and_range_of_values(data_dictionary: dict) -> None:
     """
     Determine the range of values for attributes that aren't nominal in nature.
     :param data_dictionary: The data dictionary to store the values in.
@@ -139,7 +140,11 @@ def determine_range_of_values(data_dictionary: dict) -> None:
                 # Skip the header file
                 next(output_file)
 
-                print(f"\t\tDetermining range for: {attribute_key}")
+                total = 0
+                size = 0
+                mean = 0
+
+                print(f"\t\tDetermining mean and range for: {attribute_key}")
                 # Iterate through all rows to determine the bottom and upper ranges.
                 for i, row in enumerate(output_file):
 
@@ -147,6 +152,11 @@ def determine_range_of_values(data_dictionary: dict) -> None:
                     if row[attribute_column] == '\\N':
                         continue
 
+                    # Mean computations
+                    size += 1
+                    total += float(row[attribute_column])
+
+                    # Range computations
                     if float(row[attribute_column]) < float(data_dictionary[attribute_key]['Bottom Range']):
 
                         # if new year is BC and the current bottom year is BC and the current bottom range is larger
@@ -160,6 +170,11 @@ def determine_range_of_values(data_dictionary: dict) -> None:
 
                     if float(row[attribute_column]) > float(data_dictionary[attribute_key]['Upper Range']):
                         data_dictionary[attribute_key]['Upper Range'] = row[attribute_column]
+
+                if size > 0:
+                    mean = total / size
+                data_dictionary[attribute_key]['Mean'] = mean
+
 
         # Shift the column right by 1
         attribute_column += 1
@@ -183,7 +198,7 @@ def create_data_dictionary() -> None:
 
     # Determine the range of values for non-nominal attributes.
     print("\tPopulating the range of values for non-nominal attributes...")
-    determine_range_of_values(data_dictionary)
+    determine_mean_and_range_of_values(data_dictionary)
 
     # Determine the total number and unique entry count of each attribute.
     print("\tDetermining unique and total number of entries...")
