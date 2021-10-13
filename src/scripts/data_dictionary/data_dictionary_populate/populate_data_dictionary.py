@@ -258,12 +258,12 @@ def create_data_dictionary() -> None:
         data_dictionary[attribute_name]['Characteristics'] = tup[2]
 
     # Determine the mean range of values for non-nominal attributes.
-    # print("\tPopulating the mean and range of values for non-nominal attributes...")
-    # determine_mean_and_range_of_values(data_dictionary)
+    print("\tPopulating the mean and range of values for non-nominal attributes...")
+    determine_mean_and_range_of_values(data_dictionary)
 
     # Determine the total number and unique entry count and mode of each attribute.
-    # print("\tDetermining unique and total number and mode of entries...")
-    # determine_number_unique_entries_and_mode(data_dictionary)
+    print("\tDetermining unique and total number and mode of entries...")
+    determine_number_unique_entries_and_mode(data_dictionary)
 
     # Determine the median of each attribute
     print("\tDetermining the median of each attribute...")
