@@ -97,7 +97,7 @@ def determine_number_unique_entries_and_mode(data_dictionary: dict) -> None:
         attribute_column += 1  # shift column for the next attribute
 
 
-def determine_data_types_and_characteristics() -> list[tuple]:
+def determine_data_types_and_characteristics() -> list:
     """
     Retrieve a list of tuples containing information about an attribute's
     data type and characteristic.
@@ -194,6 +194,53 @@ def determine_mean_and_range_of_values(data_dictionary: dict) -> None:
         attribute_column += 1
 
 
+def determine_median(data_dictionary: dict) -> None:
+    """
+    Determine the median for each attribute in the output file.
+    :param data_dictionary: The data dictionary to read and write to.
+    """
+    final_output_file = os.path.abspath(os.path.join(COMBINED, "final.output.tsv"))
+    # Start at column0
+    attribute_column = 0
+
+    # Iterate through all of the numeric attributes
+    for attribute_key in data_dictionary:
+        if data_dictionary[attribute_key]['Characteristics'].lower() != 'nominal':
+
+            entries_list = []
+
+            with open(final_output_file, mode='r', encoding='utf-8') as file:
+                output_file = csv.reader(file, delimiter='\t')
+
+                # Skip the header file
+                next(output_file)
+
+                print(f"\t\tDetermining the median for: {attribute_key}")
+
+                # Count the number of values for an attribute
+                for row in output_file:
+
+                    # Skip the null attributes.
+                    if row[attribute_column] == '\\N':
+                        continue
+
+                    entries_list.append(float(row[attribute_column]))
+
+                entries_list.sort()
+                list_size = len(entries_list)
+                median = None
+
+                if list_size > 0:
+                    if list_size % 2 == 0:
+                        median = (entries_list[list_size // 2] + entries_list[(list_size // 2) + 1]) / 2
+                    else:
+                        median = entries_list[list_size // 2]
+
+                data_dictionary[attribute_key]['Median'] = median
+
+        attribute_column += 1  # shift column for the next attribute
+
+
 def create_data_dictionary() -> None:
     """
     Create and populate a data dictionary.
@@ -210,13 +257,17 @@ def create_data_dictionary() -> None:
         data_dictionary[attribute_name]['Type'] = tup[1]
         data_dictionary[attribute_name]['Characteristics'] = tup[2]
 
-    # Determine the range of values for non-nominal attributes.
-    print("\tPopulating the range of values for non-nominal attributes...")
-    determine_mean_and_range_of_values(data_dictionary)
+    # Determine the mean range of values for non-nominal attributes.
+    # print("\tPopulating the mean and range of values for non-nominal attributes...")
+    # determine_mean_and_range_of_values(data_dictionary)
 
-    # Determine the total number and unique entry count of each attribute.
-    print("\tDetermining unique and total number of entries...")
-    determine_number_unique_entries_and_mode(data_dictionary)
+    # Determine the total number and unique entry count and mode of each attribute.
+    # print("\tDetermining unique and total number and mode of entries...")
+    # determine_number_unique_entries_and_mode(data_dictionary)
+
+    # Determine the median of each attribute
+    print("\tDetermining the median of each attribute...")
+    determine_median(data_dictionary)
 
     print("Data Dictionary")
     print_dictionary(data_dictionary)
