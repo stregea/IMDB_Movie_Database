@@ -33,7 +33,9 @@ def create_inner_dictionary() -> dict:
         'Bottom Range (min)': None,
         'Upper Range (max)': None,
         'Mean': None,
-        'Mode': None
+        'Mode': None,
+        'Median': None,
+        'Outliers': None
     }
 
 
@@ -97,7 +99,7 @@ def determine_number_unique_entries_and_mode(data_dictionary: dict) -> None:
         attribute_column += 1  # shift column for the next attribute
 
 
-def determine_data_types_and_characteristics() -> list[tuple]:
+def determine_data_types_and_characteristics() -> list:
     """
     Retrieve a list of tuples containing information about an attribute's
     data type and characteristic.
@@ -194,6 +196,92 @@ def determine_mean_and_range_of_values(data_dictionary: dict) -> None:
         attribute_column += 1
 
 
+def determine_median_and_outliers(data_dictionary: dict) -> None:
+    """
+    Determine the median for each attribute in the output file.
+    :param data_dictionary: The data dictionary to read and write to.
+    """
+    final_output_file = os.path.abspath(os.path.join(COMBINED, "final.output.tsv"))
+    # Start at column0
+    attribute_column = 0
+
+    # Iterate through all of the numeric attributes
+    for attribute_key in data_dictionary:
+        if data_dictionary[attribute_key]['Characteristics'].lower() != 'nominal':
+
+            entries_list = []
+
+            with open(final_output_file, mode='r', encoding='utf-8') as file:
+                output_file = csv.reader(file, delimiter='\t')
+
+                # Skip the header file
+                next(output_file)
+
+                print(f"\t\tDetermining the median and outliers for: {attribute_key}")
+
+                # Iterate through all of the rows in the file
+                for row in output_file:
+
+                    # Skip the null attributes.
+                    if row[attribute_column] == '\\N':
+                        continue
+
+                    entries_list.append(float(row[attribute_column]))
+
+                # Sort list and store list size
+                entries_list.sort()
+                list_size = len(entries_list)
+
+                # Only consider median and outliers for lists with at least one element
+                if list_size > 0:
+
+                    # Calculate median
+                    # median = None
+
+                    # if list_size % 2 == 0:
+                    #     median = (entries_list[list_size // 2] + entries_list[(list_size // 2) + 1]) / 2
+                    # else:
+                    #     median = entries_list[list_size // 2]
+
+                    data_dictionary[attribute_key]['Median'] = find_median_of_list(entries_list)
+
+                    # Calculate first and third quartile then interquartile range and outlier thresholds
+                    first_quartile = find_median_of_list(entries_list[:list_size // 2])
+                    third_quartile = None
+
+                    if list_size % 2 == 0:
+                        third_quartile = find_median_of_list(entries_list[list_size // 2:])
+                    else:
+                        third_quartile = find_median_of_list(entries_list[(list_size // 2) + 1:])
+
+                    interquartile_range = third_quartile - first_quartile
+                    lower_outlier_threshold = first_quartile - (interquartile_range * 3)
+                    upper_outlier_threshold = third_quartile + (interquartile_range * 3)
+
+                    # Iterate through our list and determine what outliers there are
+                    outlier_list = []
+
+                    for value in entries_list:
+                        if value < lower_outlier_threshold or value > upper_outlier_threshold:
+                            if value not in outlier_list:
+                                outlier_list.append(value)
+
+                    data_dictionary[attribute_key]['Outliers'] = outlier_list
+
+        attribute_column += 1  # shift column for the next attribute
+
+def find_median_of_list(list_of_values):
+    """
+    Get the median of list_of_values which is assumed to have size greater than 0
+    """
+    list_length = len(list_of_values)
+
+    if list_length % 2 == 0:
+        return (list_of_values[list_length // 2] + list_of_values[(list_length // 2) + 1]) / 2
+    else:
+        return list_of_values[list_length // 2]
+
+
 def create_data_dictionary() -> None:
     """
     Create and populate a data dictionary.
@@ -210,13 +298,17 @@ def create_data_dictionary() -> None:
         data_dictionary[attribute_name]['Type'] = tup[1]
         data_dictionary[attribute_name]['Characteristics'] = tup[2]
 
-    # Determine the range of values for non-nominal attributes.
-    print("\tPopulating the range of values for non-nominal attributes...")
+    # Determine the mean range of values for non-nominal attributes.
+    print("\tPopulating the mean and range of values for non-nominal attributes...")
     determine_mean_and_range_of_values(data_dictionary)
 
-    # Determine the total number and unique entry count of each attribute.
-    print("\tDetermining unique and total number of entries...")
+    # Determine the total number and unique entry count and mode of each attribute.
+    print("\tDetermining unique and total number and mode of entries...")
     determine_number_unique_entries_and_mode(data_dictionary)
+
+    # Determine the median of each attribute
+    print("\tDetermining the median and outliers of each attribute...")
+    determine_median_and_outliers(data_dictionary)
 
     print("Data Dictionary")
     print_dictionary(data_dictionary)
