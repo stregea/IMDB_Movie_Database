@@ -7,6 +7,7 @@ from scripts.datasets.combine.combine_files import combine_title_files
 from scripts.datasets.combine.combine_files import combine_name_file
 from scripts.datasets.expand.reduce_multi_value import reduce_multi_values_for_title
 from scripts.data_dictionary.data_dictionary_populate.populate_data_dictionary import create_data_dictionary
+from scripts.data_analysis.data_visualization.visualization import make_histogram_checker
 
 
 def setup_args() -> Namespace:
@@ -26,6 +27,12 @@ def setup_args() -> Namespace:
                         '--data_dictionary',
                         help='generate a data dictionary for the database',
                         action='store_true')
+
+    parser.add_argument('-dv',
+                        '--data_visualization',
+                        help='run the data visualization tasks',
+                        action='store_true')
+
     return parser.parse_args()
 
 
@@ -54,6 +61,9 @@ def main() -> None:
 
     if args.data_dictionary:
         create_data_dictionary()
+
+    if args.data_visualization:
+        make_histogram_checker()
 
 
 if __name__ == '__main__':

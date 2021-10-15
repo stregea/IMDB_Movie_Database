@@ -5,6 +5,8 @@ Make different types of graphs.
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+from utils.globals import types, titleType
+from ..analysis_functionality.analysis import get_attributes_column_from_data
 
 # set the seaborn theme for the visualizations
 sns.set()
@@ -17,6 +19,9 @@ def display_visualization(data: pd.DataFrame, visualization: str, attributes: tu
     if visualization.lower() == "histplot":
         sns.histplot(data=data, x=attributes[0], y=attributes[1], hue=kwargs['hue'], multiple=kwargs['multiple'])
 
+    elif visualization.lower() == "histplot1d":
+        sns.histplot(data=data, x=attributes[0], hue=kwargs['hue'], multiple=kwargs['multiple'])
+
     elif visualization.lower() == "barplot":
         sns.barplot(data=data, x=attributes[0], y=attributes[1])
 
@@ -26,28 +31,44 @@ def display_visualization(data: pd.DataFrame, visualization: str, attributes: tu
     plt.show()
 
 
-def histogram(df: pd.DataFrame, attribute_to_visualize: str, attributes: tuple) -> None:
+def histogram(df: pd.DataFrame, attribute_to_visualize: str, attributes: tuple, univariate: bool) -> None:
     """
     Display a Histogram visualization.
     Reference: https://seaborn.pydata.org/generated/seaborn.histplot.html
     :param df: Pandas dataframe containing the information to visualize.
     :param attribute_to_visualize: Semantic variable that is mapped to determine the color of plot elements.
     :param attributes: Tuple that contains the variables that specify positions on the x and y axes.
+    :param univariate: Boolean value stating whether or not thie histogram should be univariate
     """
-    display_visualization(data=df,
-                          visualization="histplot",
-                          attributes=attributes,
-                          hue=attribute_to_visualize,
-                          multiple="stack")
+    if univariate:
+        display_visualization(data=df,
+                              visualization="histplot1d",
+                              attributes=attributes,
+                              hue=attribute_to_visualize,
+                              multiple="stack")
+
+    else:
+        display_visualization(data=df,
+                              visualization="histplot",
+                              attributes=attributes,
+                              hue=attribute_to_visualize,
+                              multiple="stack")
 
 
 def make_histogram_checker():
     """
-    run unique values function for all non-numeric data attributes.
-    If less than 15 unique values, then make histogram for each.
-    (Calls histogram() )
+    Create a histogram for each attribute that we want to visualize
     """
-    pass
+    attributes_to_visualize = {
+        'types': types,
+        'titleType': titleType
+    }
+
+    for key in attributes_to_visualize:
+        histogram(df=get_attributes_column_from_data(attributes_to_visualize[key], key),
+                  attribute_to_visualize=key,
+                  attributes=[key],
+                  univariate=True)
 
 
 def bar_chart(df: pd.DataFrame, attributes: tuple[str, str]) -> None:
