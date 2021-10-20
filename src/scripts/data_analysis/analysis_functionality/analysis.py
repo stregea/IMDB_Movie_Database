@@ -97,8 +97,8 @@ def primary_profession_total() -> dict:
             if nconst_value not in nconst_set:
                 nconst_set.add(nconst_value)
 
-            # count the total number of occurrences
-            if profession not in dictionary_of_professions:
+            # count the total number of occurrences, don't include the null values.
+            if profession not in dictionary_of_professions and profession != '\\N':
                 dictionary_of_professions[profession] = 0
 
             # Increment the total count for the current profession if not null.
