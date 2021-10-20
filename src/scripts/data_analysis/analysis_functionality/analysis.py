@@ -112,8 +112,6 @@ def primary_profession_total() -> dict:
             dictionary_of_professions[profession] / total_number_of_people
         )
 
-    print_dict(dictionary_of_professions)
-
     return dictionary_of_professions
 
 
