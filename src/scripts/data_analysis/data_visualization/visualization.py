@@ -6,7 +6,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 from utils.globals import types, titleType
-from ..analysis_functionality.analysis import get_attributes_column_from_data
+from scripts.data_analysis.analysis_functionality.analysis import get_attributes_column_from_data
 
 # set the seaborn theme for the visualizations
 sns.set()
@@ -67,7 +67,7 @@ def make_histogram_checker():
     for key in attributes_to_visualize:
         histogram(df=get_attributes_column_from_data(attributes_to_visualize[key], key),
                   attribute_to_visualize=key,
-                  attributes=[key],
+                  attributes=(key, None),
                   univariate=True)
 
 
