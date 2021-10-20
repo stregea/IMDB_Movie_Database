@@ -1,50 +1,14 @@
 """
 Data analysis basic functions that will be called by analysis_specific.
 """
-
 import os
 import csv
 import pandas as pd
-from utils.globals import COMBINED
+from utils.globals import COMBINED, genres, runtimeMinutes, region
+# from scripts.data_analysis.data_visualization.visualization import bar_chart, histogram
 
 
-def get_genre_information() -> None:
-    """
-    Genre analysis script.
-    Will be called by more specific functions.
-    """
-    return
-
-
-def get_run_time_mins_information():
-    """
-    Will be called by more specific functions.
-    """
-    return
-
-def get_region_information():
-    """
-    Will be called by more specific functions
-    """
-    return
-
-def primary_profession_total():
-    """
-    What % of the total data is each primary profession?
-    - Must not double count the same nconst as multiple people.
-      Number of unique nconsts is the total data to compare against.
-    """
-    return
-
-def primary_profession_amount():
-    """
-    What % of people (nconst) have one primary profession? 2? 3 or more?
-    Calculates this.
-    Visualization method to be determined.
-    """
-    return
-
-def get_attributes_column_from_data(column_index, column_name):
+def get_attributes_column_from_data(column_index: int, column_name: str) -> pd.DataFrame:
     """
     Get the given column as a 1d list in a pandas DataFrame
     :param column_index: the numerical index of the column we are looking for
@@ -67,3 +31,43 @@ def get_attributes_column_from_data(column_index, column_name):
                 attributes_list.append(row[column_index])
 
         return pd.DataFrame(data=attributes_list, columns=[column_name])
+
+
+def get_genre_information() -> pd.DataFrame:
+    """
+    Genre analysis script.
+    Will be called by more specific functions.
+    """
+    return get_attributes_column_from_data(column_index=genres, column_name='genres')
+
+
+def get_run_time_mins_information() -> pd.DataFrame:
+    """
+    Will be called by more specific functions.
+    """
+    return get_attributes_column_from_data(column_index=runtimeMinutes, column_name='runtimeMinutes')
+
+
+def get_region_information():
+    """
+    Will be called by more specific functions
+    """
+    return get_attributes_column_from_data(column_index=region, column_name='region')
+
+
+def primary_profession_total():
+    """
+    What % of the total data is each primary profession?
+    - Must not double count the same nconst as multiple people.
+      Number of unique nconsts is the total data to compare against.
+    """
+    return
+
+
+def primary_profession_amount():
+    """
+    What % of people (nconst) have one primary profession? 2? 3 or more?
+    Calculates this.
+    Visualization method to be determined.
+    """
+    return
