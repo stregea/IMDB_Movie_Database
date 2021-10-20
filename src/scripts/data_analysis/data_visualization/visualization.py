@@ -6,7 +6,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 from utils.globals import types, titleType
-from ..analysis_functionality.analysis import get_attributes_column_from_data
+from scripts.data_analysis.analysis_functionality.analysis import get_attributes_column_from_data
 
 # set the seaborn theme for the visualizations
 sns.set()
@@ -67,7 +67,7 @@ def make_histogram_checker():
     for key in attributes_to_visualize:
         histogram(df=get_attributes_column_from_data(attributes_to_visualize[key], key),
                   attribute_to_visualize=key,
-                  attributes=[key],
+                  attributes=(key, None),
                   univariate=True)
 
 
@@ -83,7 +83,7 @@ def bar_chart(df: pd.DataFrame, attributes: tuple[str, str]) -> None:
                           attributes=attributes)
 
 
-def pie_chart(df: pd.DataFrame, attribute_to_plot, labels_for_attribute) -> None:
+def pie_chart(df: pd.DataFrame, attribute_to_plot: str, labels_for_attribute: str) -> None:
     """
     TODO: This has not been tested at all. Look back into later while working on
     TODO: the creation of the dataframes to send in.
@@ -91,6 +91,8 @@ def pie_chart(df: pd.DataFrame, attribute_to_plot, labels_for_attribute) -> None
     Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pie.html
     Reference: https://matplotlib.org/stable/gallery/pie_and_polar_charts/pie_features.html
     :param df: Pandas dataframe containing the information to visualize.
+    :param attribute_to_plot: The attribute to display the information for.
+    :param labels_for_attribute: The labels to add on to the pie chart that correspond with its values..
     """
     values = df[attribute_to_plot]
 
@@ -99,7 +101,7 @@ def pie_chart(df: pd.DataFrame, attribute_to_plot, labels_for_attribute) -> None
         This function will determine which value is the largest in the list, and
         will return a tuple containing the information that will have the largest percentage
         within the pie chart pop off.
-        :param list_of_values:
+        :param list_of_values: The list of all the values being used.
         :return: A tuple of 'exploding' values for a pie chart.
         """
         exploding_values = [0.0 for value in list_of_values]
