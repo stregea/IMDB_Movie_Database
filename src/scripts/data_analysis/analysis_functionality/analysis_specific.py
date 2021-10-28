@@ -34,33 +34,6 @@ def average_average_ratings_vs_genre():
 
     return
 
-def average_rating_vs_region():
-    """
-    ( Specific function )
-    Bivariate.
-    Gets average of average ratings, per region.
-    """
-    
-    # get the necessary dataframes
-    region_df = get_region_information()
-    averageRating_df = get_averageRating_information()
-
-    # coerce averageRating_df to a float
-    averageRating_df["averageRating"] = pd.to_numeric(averageRating_df["averageRating"], errors="coerce")
-
-    # reset indicies
-    averageRating_df.index = region_df.index
-
-    # concatenate the two datasets
-    concatenated_df = pd.concat([region_df, averageRating_df], axis=1)
-
-    # average by group
-    grouped_df = concatenated_df.groupby("region", as_index=False).mean()
-
-    display_visualization(grouped_df, 'barplot', ("region", "averageRating"))
-
-    return
-
 def average_run_time_per_genre():
     """
     ( Specific function )
