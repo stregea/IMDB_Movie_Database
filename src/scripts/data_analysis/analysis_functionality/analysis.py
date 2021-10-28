@@ -4,7 +4,7 @@ Data analysis basic functions that will be called by analysis_specific.
 import os
 import csv
 import pandas as pd
-from utils.globals import COMBINED, genres, runtimeMinutes, region, nconst, primaryProfession
+from utils.globals import COMBINED, genres, runtimeMinutes, region, nconst, primaryProfession, averageRating
 from utils.helpers import convert_number_to_percentage, print_dict
 
 
@@ -42,6 +42,13 @@ def get_genre_information() -> pd.DataFrame:
     """
     return get_attributes_column_from_data(column_index=genres, column_name='genres')
 
+def get_averageRating_information() -> pd.DataFrame:
+    """
+    averageRating analysis script.
+    Will be called by more specific functions.
+    :return: A pandas DataFrame containing information for the 'averageRating' attribute.
+    """
+    return get_attributes_column_from_data(column_index=averageRating, column_name='averageRating')
 
 def get_run_time_mins_information() -> pd.DataFrame:
     """

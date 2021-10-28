@@ -28,6 +28,9 @@ def display_visualization(data: pd.DataFrame, visualization: str, attributes: tu
     elif visualization.lower() == "scatterplot":
         sns.scatterplot(data=data, x=attributes[0], y=attributes[1], hue=kwargs['hue'])
 
+    elif visualization.lower() == "lineplot":
+        sns.lineplot(data=data, x=attributes[0], y=attributes[1], ci=None)
+
     plt.show()
 
 
