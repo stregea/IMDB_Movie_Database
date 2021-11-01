@@ -3,8 +3,63 @@
 """
 
 import pandas as pd
-from scripts.data_analysis.analysis_functionality.analysis import get_genre_information, get_run_time_mins_information, get_averageRating_information, get_region_information
+from scripts.data_analysis.analysis_functionality.analysis import get_genre_information, get_run_time_mins_information, \
+    get_averageRating_information, get_region_information, get_start_year_info, get_end_year_info
 from scripts.data_analysis.data_visualization.visualization import display_visualization
+
+
+def display_numeric_data():
+    """
+    Get data and display for ordering, averageRating, start year, end year, run time minutes
+    """
+    display_average_ratings()
+    display_runtime()
+    display_start_year()
+    #display_end_year() #end year is /N so commented out this
+    return
+
+
+def display_average_ratings():
+    """
+    Gets avg ratings info with premade function then displays
+    """
+    # get average ratings
+    averageRating_df = get_averageRating_information()
+    # coerce averageRating_df to a float
+    averageRating_df["averageRating"] = pd.to_numeric(averageRating_df["averageRating"], errors="coerce")
+    # box plot visual
+    display_visualization(averageRating_df, 'boxplot', ("averageRating",))
+    return
+
+def display_runtime():
+    """
+    Gets runtime info with premade function then displays
+    """
+    runtimeMins_df = get_run_time_mins_information()
+    # coerce runtimeMins_df to a float
+    runtimeMins_df["runtimeMinutes"] = pd.to_numeric(runtimeMins_df["runtimeMinutes"], errors="coerce")
+    display_visualization(runtimeMins_df, 'boxplot', ("runtimeMinutes",))
+    return
+
+def display_start_year():
+    """
+    Gets start year information and displays with box plot
+    """
+    startYear_df = get_start_year_info()
+    startYear_df["startYear"] = pd.to_numeric(startYear_df["startYear"], errors="coerce")
+    display_visualization(startYear_df, 'boxplot', ("startYear",))
+    return
+
+# def display_end_year():
+# #end year is /N so function is commented out
+#     """
+#     Gets end year information and displays with box plot
+#     """
+#     endYear_df = get_end_year_info()
+#     endYear_df["startYear"] = pd.to_numeric(endYear_df["endYear"], errors="coerce")
+#     display_visualization(endYear_df, 'boxplot', ("endYear",))
+#     return
+
 
 def average_average_ratings_vs_genre():
     """
