@@ -30,6 +30,8 @@ def display_visualization(data: pd.DataFrame, visualization: str, attributes: tu
 
     elif visualization.lower() == "lineplot":
         sns.lineplot(data=data, x=attributes[0], y=attributes[1], ci=None)
+    elif visualization.lower() == "boxplot":
+        sns.boxplot(data=data, x=attributes[0])
 
     plt.show()
 
@@ -148,3 +150,13 @@ def scatter_plot(df: pd.DataFrame, attribute_to_visualize: str, attributes: tupl
                           visualization="scatterplot",
                           attributes=attributes,
                           hue=attribute_to_visualize)
+
+def box_plot(df: pd.DataFrame, attributes: tuple[str, str]) -> None:
+    """
+    Display a Box Plot visualization.
+    :param df: Pandas dataframe containing the information to visualize.
+    :param attributes: Tuple that contains the variable that specify positions on the x axis
+    """
+    display_visualization(data=df,
+                          visualization="boxplot",
+                          attributes=attributes)

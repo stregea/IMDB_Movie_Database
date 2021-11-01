@@ -4,7 +4,8 @@ Data analysis basic functions that will be called by analysis_specific.
 import os
 import csv
 import pandas as pd
-from utils.globals import COMBINED, genres, runtimeMinutes, region, nconst, primaryProfession, averageRating
+from utils.globals import COMBINED, genres, runtimeMinutes, region, nconst, primaryProfession, averageRating, \
+    endYear, startYear
 from utils.helpers import convert_number_to_percentage, print_dict
 
 
@@ -65,6 +66,17 @@ def get_region_information():
     """
     return get_attributes_column_from_data(column_index=region, column_name='region')
 
+def get_start_year_info():
+    """
+    Gets start year information
+    """
+    return get_attributes_column_from_data(column_index=startYear, column_name='startYear')
+
+def get_end_year_info():
+    """
+    Gets end year information
+    """
+    return get_attributes_column_from_data(column_index=endYear, column_name='endYear')
 
 def primary_profession_total() -> dict:
     """
