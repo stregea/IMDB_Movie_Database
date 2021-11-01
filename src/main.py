@@ -64,7 +64,7 @@ def main() -> None:
         create_data_dictionary()
 
     if args.data_visualization:
-        # make_histogram_checker()
+        make_histogram_checker()
         display_numeric_data()
         display_bivariate_data()
 
