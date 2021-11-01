@@ -8,18 +8,28 @@ from scripts.data_analysis.analysis_functionality.analysis import get_genre_info
 from scripts.data_analysis.data_visualization.visualization import display_visualization
 
 
-def display_numeric_data():
+def display_numeric_data() -> None:
     """
     Get data and display for ordering, averageRating, start year, end year, run time minutes
     """
     display_average_ratings()
     display_runtime()
     display_start_year()
-    #display_end_year() #end year is /N so commented out this
-    return
+    # display_end_year() #end year is /N so commented out this
 
 
-def display_average_ratings():
+def display_bivariate_data() -> None:
+    """
+    Display bivariate charts for: Average Ratings vs Genre
+                                  Average Runtime vs Genre
+                                  Average Rating vs Runtime Minutes
+    """
+    average_average_ratings_vs_genre()
+    average_run_time_per_genre()
+    average_rating_vs_run_time_mins()
+
+
+def display_average_ratings() -> None:
     """
     Gets avg ratings info with premade function then displays
     """
@@ -29,9 +39,9 @@ def display_average_ratings():
     averageRating_df["averageRating"] = pd.to_numeric(averageRating_df["averageRating"], errors="coerce")
     # box plot visual
     display_visualization(averageRating_df, 'boxplot', ("averageRating",))
-    return
 
-def display_runtime():
+
+def display_runtime() -> None:
     """
     Gets runtime info with premade function then displays
     """
@@ -39,16 +49,15 @@ def display_runtime():
     # coerce runtimeMins_df to a float
     runtimeMins_df["runtimeMinutes"] = pd.to_numeric(runtimeMins_df["runtimeMinutes"], errors="coerce")
     display_visualization(runtimeMins_df, 'boxplot', ("runtimeMinutes",))
-    return
 
-def display_start_year():
+
+def display_start_year() -> None:
     """
     Gets start year information and displays with box plot
     """
     startYear_df = get_start_year_info()
     startYear_df["startYear"] = pd.to_numeric(startYear_df["startYear"], errors="coerce")
     display_visualization(startYear_df, 'boxplot', ("startYear",))
-    return
 
 # def display_end_year():
 # #end year is /N so function is commented out
@@ -58,7 +67,6 @@ def display_start_year():
 #     endYear_df = get_end_year_info()
 #     endYear_df["startYear"] = pd.to_numeric(endYear_df["endYear"], errors="coerce")
 #     display_visualization(endYear_df, 'boxplot', ("endYear",))
-#     return
 
 
 def average_average_ratings_vs_genre():
@@ -87,7 +95,6 @@ def average_average_ratings_vs_genre():
 
     display_visualization(grouped_df, 'barplot', ("genres", "averageRating"))
 
-    return
 
 def average_run_time_per_genre():
     """
@@ -115,7 +122,6 @@ def average_run_time_per_genre():
 
     display_visualization(grouped_df, 'barplot', ("genres", "runtimeMinutes"))
 
-    return
 
 def average_rating_vs_run_time_mins():
     """
@@ -141,6 +147,3 @@ def average_rating_vs_run_time_mins():
     concatenated_df = pd.concat([averageRating_df, runtimeMins_df], axis=1)
 
     display_visualization(concatenated_df, 'lineplot', ("runtimeMinutes", "averageRating"))
-
-    return
-
