@@ -34,6 +34,11 @@ def setup_args() -> Namespace:
                         help='run the data visualization tasks',
                         action='store_true')
 
+    parser.add_argument('-dn',
+                        '--data_normalization',
+                        help='normalize the numeric data',
+                        action='store_true')
+
     return parser.parse_args()
 
 
@@ -68,6 +73,8 @@ def main() -> None:
         display_numeric_data()
         display_bivariate_data()
 
+    if args.data_normalization:
+        pass
 
 if __name__ == '__main__':
     main()
