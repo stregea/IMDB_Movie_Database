@@ -1,0 +1,48 @@
+import os
+import csv
+import pandas as pd
+import numpy as np
+from utils.globals import COMBINED
+
+
+def remove_unwanted_attributes() -> None:
+    """
+    Remove unwanted attributes/columns from the dataset.
+    """
+    final_output_file = os.path.abspath(os.path.join(COMBINED, "final.output.tsv"))
+    df_file = os.path.abspath(os.path.join(COMBINED, 'dataframe.tsv'))
+
+    print(f"Removing attributes from '{final_output_file}'...")
+
+    print(f"\tLoading dataframe from '{final_output_file}'...")
+    dataframe = pd.read_csv(final_output_file,
+                            delimiter='\t',
+                            na_values='\\N',
+                            index_col=False,
+                            dtype=
+                            {
+                                'language': str,
+                                'types': str,
+                                'attributes': str,
+                                'isOriginalTitle': object,
+                                'startYear': object,
+                                'endYear': object,
+                                'runtimeMinutes': object,
+                                'birthYear': object,
+                                'deathYear': object,
+                            }
+                            )
+
+    # Insert 'null' for missing values. This also replaces the string '\N'
+    print("\tInserting 'nan' into empty values...")
+    dataframe.fillna(value=str(np.nan), inplace=True)
+
+    # Drop these attributes
+    print("\tDropping attributes...")
+    dataframe.drop(columns=['region', 'language', 'types', 'attributes', 'titleType', 'endYear'], inplace=True)
+
+    # Create new output file.
+    print(f"\tWriting output to '{df_file}'...")
+    dataframe.to_csv(path_or_buf=df_file, sep='\t', index=False)
+
+    print("Process complete.")
