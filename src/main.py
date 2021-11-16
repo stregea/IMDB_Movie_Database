@@ -9,7 +9,7 @@ from scripts.datasets.expand.reduce_multi_value import reduce_multi_values_for_t
 from scripts.data_dictionary.data_dictionary_populate.populate_data_dictionary import create_data_dictionary
 from scripts.data_analysis.data_visualization.visualization import make_histogram_checker
 from scripts.data_analysis.analysis_functionality.analysis_specific import display_numeric_data, display_bivariate_data
-
+from scripts.data_normalization.missing_values.handle_missing_values import remove_unwanted_attributes
 
 def setup_args() -> Namespace:
     """
@@ -74,7 +74,8 @@ def main() -> None:
         display_bivariate_data()
 
     if args.data_normalization:
-        pass
+        remove_unwanted_attributes()
+
 
 if __name__ == '__main__':
     main()
