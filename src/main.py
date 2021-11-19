@@ -10,6 +10,7 @@ from scripts.data_dictionary.data_dictionary_populate.populate_data_dictionary i
 from scripts.data_analysis.data_visualization.visualization import make_histogram_checker
 from scripts.data_analysis.analysis_functionality.analysis_specific import display_numeric_data, display_bivariate_data
 from scripts.data_normalization.missing_values.handle_missing_values import remove_unwanted_attributes
+from scripts.data_manipulation.data_normalization import run_normalization_tests
 
 def setup_args() -> Namespace:
     """
@@ -37,6 +38,11 @@ def setup_args() -> Namespace:
     parser.add_argument('-dn',
                         '--data_normalization',
                         help='normalize the numeric data',
+                        action='store_true')
+                        
+    parser.add_argument('-dnt',
+                        '--data_normalization_tests',
+                        help='run the data normalization tests',
                         action='store_true')
 
     return parser.parse_args()
@@ -76,6 +82,8 @@ def main() -> None:
     if args.data_normalization:
         remove_unwanted_attributes()
 
+    if args.data_normalization_tests:
+        run_normalization_tests()
 
 if __name__ == '__main__':
     main()
