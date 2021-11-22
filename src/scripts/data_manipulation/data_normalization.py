@@ -13,7 +13,7 @@ BATCH_SIZE = 1
 
 def run_normalization_tests() -> None:
     """
-    General function that sets up the data and runs it throught the individual tests
+    General function that sets up the data and runs it throughout the individual tests
     """
 
     file_name = os.path.abspath(DATASETS + "/Combined/final.output.tsv")
@@ -81,7 +81,7 @@ def baseline_test(numeric_features, target) -> None:
     """
     Run the data (as is) through the keras model as a baseline test
     """
-    
+
     model = get_model()
 
     print("Baseline results -----------------------------------------------------------------------")

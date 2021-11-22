@@ -13,15 +13,16 @@ def normalization_method(df):
     # df_file = os.path.abspath(os.path.join(COMBINED, 'dataframe.tsv'))
     attributes_to_change = ['averageRating', 'numVotes', 'startYear', 'runtimeMinutes', 'birthYear', 'deathYear']
 
-    # for i in range(len(df[0])):
     for a in attributes_to_change:
         column = df[a]
-        column = column[1:]
         mean_col = mean(column) # mean
         std_col = stdev(column) # standard deviation
-        for p in range(len(df)):
+        p=1
+        while p < len(df):
             new_value = (column[p] - mean_col) / std_col
-            df[p][a] = new_value
+            column[p] = new_value
+            p+=1
+        df[a] = column
 
     return df
 
@@ -66,7 +67,7 @@ def remove_unwanted_attributes() -> None:
 
     # Normalize specific attributes
     print("\tNormalizing attributes...")
-    normalization_method(dataframe)
+    dataframe = normalization_method(dataframe)
 
     # Create new output file.
     print(f"\tWriting output to '{df_file}'...")
