@@ -1,8 +1,33 @@
 import os
 import csv
+from statistics import mean, stdev
+
 import pandas as pd
 import numpy as np
+
 from utils.globals import COMBINED
+
+
+
+def normalization_method(df):
+    # df_file = os.path.abspath(os.path.join(COMBINED, 'dataframe.tsv'))
+    attributes_to_change = ['averageRating', 'numVotes', 'startYear', 'runtimeMinutes', 'birthYear', 'deathYear']
+
+    for a in attributes_to_change:
+        column = df[a]
+        mean_col = mean(column) # mean
+        std_col = stdev(column) # standard deviation
+        p=1
+        while p < len(df):
+            if column[p] != float:
+                column[p] = float(column[p])
+            new_value = (column[p] - mean_col) / std_col
+            column[p] = new_value
+            p+=1
+        df[a] = column
+
+    return df
+
 
 
 def remove_unwanted_attributes() -> None:
@@ -41,8 +66,16 @@ def remove_unwanted_attributes() -> None:
     print("\tDropping attributes...")
     dataframe.drop(columns=['region', 'language', 'types', 'attributes', 'titleType', 'endYear'], inplace=True)
 
+
+    # Normalize specific attributes
+    print("\tNormalizing attributes...")
+    dataframe = normalization_method(dataframe)
+
     # Create new output file.
     print(f"\tWriting output to '{df_file}'...")
     dataframe.to_csv(path_or_buf=df_file, sep='\t', index=False)
 
     print("Process complete.")
+
+
+
