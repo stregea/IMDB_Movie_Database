@@ -19,6 +19,8 @@ def normalization_method(df):
         std_col = stdev(column) # standard deviation
         p=1
         while p < len(df):
+            if column[p] != float:
+                column[p] = float(column[p])
             new_value = (column[p] - mean_col) / std_col
             column[p] = new_value
             p+=1
