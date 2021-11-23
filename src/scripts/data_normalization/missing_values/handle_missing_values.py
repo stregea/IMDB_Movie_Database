@@ -1,7 +1,5 @@
 import os
 import csv
-from statistics import mean, stdev
-
 import pandas as pd
 import numpy as np
 
@@ -14,13 +12,13 @@ def normalization_method(df):
     attributes_to_change = ['averageRating', 'numVotes', 'startYear', 'runtimeMinutes', 'birthYear', 'deathYear']
 
     for a in attributes_to_change:
-        column = df[a]
-        mean_col = mean(column) # mean
-        std_col = stdev(column) # standard deviation
+        column = [float(i) for i in df[a]]
+        mean_col = pd.to_numeric(df[a], errors="coerce").mean(skipna=True) # mean
+        std_col = pd.to_numeric(df[a], errors="coerce").std(skipna=True) # standard deviation
         p=1
         while p < len(df):
-            if column[p] != float:
-                column[p] = float(column[p])
+            #if column[p] != float:
+            column[p] = float(str(column[p]))
             new_value = (column[p] - mean_col) / std_col
             column[p] = new_value
             p+=1
@@ -58,6 +56,11 @@ def remove_unwanted_attributes() -> None:
                             }
                             )
 
+    # NOTE: testing if normalizing first does anything
+    # Normalize specific attributes
+    print("\tNormalizing attributes...")
+    dataframe = normalization_method(dataframe)
+
     # Insert 'null' for missing values. This also replaces the string '\N'
     print("\tInserting 'nan' into empty values...")
     dataframe.fillna(value=str(np.nan), inplace=True)
@@ -66,10 +69,6 @@ def remove_unwanted_attributes() -> None:
     print("\tDropping attributes...")
     dataframe.drop(columns=['region', 'language', 'types', 'attributes', 'titleType', 'endYear'], inplace=True)
 
-
-    # Normalize specific attributes
-    print("\tNormalizing attributes...")
-    dataframe = normalization_method(dataframe)
 
     # Create new output file.
     print(f"\tWriting output to '{df_file}'...")
