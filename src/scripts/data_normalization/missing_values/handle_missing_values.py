@@ -1,6 +1,5 @@
 import os
 import csv
-from statistics import mean, stdev
 import pandas as pd
 import numpy as np
 
@@ -15,9 +14,9 @@ def normalization_method(df):
     for a in attributes_to_change:
         column = [float(i) for i in df[a]]
         print("here")
-        mean_col = mean(column) # mean
+        mean_col = pd.to_numeric(df[a], errors="coerce").mean(skipna=True) # mean
         print(mean_col)
-        std_col = stdev(column) # standard deviation
+        std_col = pd.to_numeric(df[a], errors="coerce").std(skipna=True) # standard deviation
         print(std_col)
         p=1
         while p < len(df):
